@@ -1,0 +1,106 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.dice-research</groupId>
+	<artifactId>opal-metadata-extraction</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>opal-metadata-extraction</name>
+	<packaging>war</packaging>
+
+	<properties>
+
+		<!-- Java -->
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+
+		<!-- Dependency versions -->
+		<microprofile.version>2.2</microprofile.version>
+		<liberty-maven-plugin.version>2.6.4</liberty-maven-plugin.version>
+
+
+		<!-- Plugins -->
+		<!-- https://mvnrepository.com/artifact/io.openliberty/openliberty-runtime/19.0.0.2 -->
+		<openliberty-runtime.version>19.0.0.2</openliberty-runtime.version>
+		<app.name>metadata-extraction</app.name>
+		<package.file>${project.build.directory}/${app.name}-service.jar</package.file>
+		<packaging.type>runnable</packaging.type>
+
+	</properties>
+
+	<dependencies>
+
+		<!-- https://mvnrepository.com/artifact/org.eclipse.microprofile/microprofile -->
+		<dependency>
+			<groupId>org.eclipse.microprofile</groupId>
+			<artifactId>microprofile</artifactId>
+			<version>${microprofile.version}</version>
+			<type>pom</type>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.wasdev.wlp.maven.plugins/liberty-maven-plugin -->
+		<dependency>
+			<groupId>net.wasdev.wlp.maven.plugins</groupId>
+			<artifactId>liberty-maven-plugin</artifactId>
+			<version>${liberty-maven-plugin.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<packagingExcludes>pom.xml</packagingExcludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>net.wasdev.wlp.maven.plugins</groupId>
+				<artifactId>liberty-maven-plugin</artifactId>
+				<version>${liberty-maven-plugin.version}</version>
+				<configuration>
+					<assemblyArtifact>
+						<groupId>io.openliberty</groupId>
+						<artifactId>openliberty-runtime</artifactId>
+						<version>${openliberty-runtime.version}</version>
+						<type>zip</type>
+					</assemblyArtifact>
+					<configFile>${basedir}/src/main/resources/server.xml</configFile>
+					<packageFile>${package.file}</packageFile>
+					<include>${packaging.type}</include>
+					<looseApplication>false</looseApplication>
+					<installAppPackages>project</installAppPackages>
+					<bootstrapProperties>
+						<app.context.root>/</app.context.root>
+						<app.location>${project.artifactId}-${project.version}.war</app.location>
+						<default.http.port>9080</default.http.port>
+						<default.https.port>9443</default.https.port>
+					</bootstrapProperties>
+				</configuration>
+				<executions>
+					<execution>
+						<id>install-server</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>install-server</goal>
+							<goal>create-server</goal>
+							<goal>install-feature</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>package-server-with-apps</id>
+						<phase>package</phase>
+						<goals>
+							<goal>install-apps</goal>
+							<goal>package-server</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
