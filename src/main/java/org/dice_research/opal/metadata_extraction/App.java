@@ -1,3 +1,4 @@
+package org.dice_research.opal.metadata_extraction;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 

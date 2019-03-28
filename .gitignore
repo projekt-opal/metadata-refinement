@@ -1,3 +1,8 @@
+# OpenNLP language model
+*.bin
+
+
+
 ### https://github.com/github/gitignore/blob/master/Java.gitignore
 
 # Compiled class file
