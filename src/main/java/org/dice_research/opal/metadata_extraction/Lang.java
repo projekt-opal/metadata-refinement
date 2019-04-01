@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.dice_research.opal.metadata_extraction.lang_detection.LanguageDetector;
+
 @Path("lang")
 @RequestScoped
 public class Lang {
@@ -19,7 +21,7 @@ public class Lang {
 	/**
 	 * Returns detected language.
 	 * 
-	 * http://localhost:9080/metadata/lang/text?text=Willkommen
+	 * e.g. http://localhost:9080/metadata/lang/text?text=Sprachen%20lernen
 	 */
 	@GET
 	@Path("{text}")

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
+import org.dice_research.opal.metadata_extraction.lang_detection.LanguageDetector;
 import org.junit.Test;
 
 public class LanguageDetectorTest {

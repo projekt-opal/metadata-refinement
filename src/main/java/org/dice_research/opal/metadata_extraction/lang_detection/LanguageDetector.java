@@ -1,4 +1,4 @@
-package org.dice_research.opal.metadata_extraction;
+package org.dice_research.opal.metadata_extraction.lang_detection;
 
 import java.io.File;
 import java.io.IOException;
