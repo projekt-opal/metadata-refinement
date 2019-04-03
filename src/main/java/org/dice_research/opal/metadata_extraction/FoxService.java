@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 
 @Path("fox")
 @RequestScoped
-public class Fox {
+public class FoxService {
 
 	public static final String FOX_API_ENDPOINT = "http://fox.cs.upb.de:4444/fox";
 

@@ -16,7 +16,7 @@ import org.dice_research.opal.metadata_extraction.lang_detection.LanguageDetecto
 
 @Path("lang")
 @RequestScoped
-public class Lang {
+public class LangService {
 
 	/**
 	 * Returns detected language.
