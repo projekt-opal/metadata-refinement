@@ -7,7 +7,7 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.dice_research.opal.metadata_extraction.fox.Fox;
-import org.dice_research.opal.metadata_extraction.lang_detection.LanguageDetector;
+import org.dice_research.opal.metadata_extraction.lang_detection.LangDetector;
 
 /**
  * Prototypical example code for combining OPAL graph, language detection, and
@@ -81,7 +81,7 @@ public class JenaExample {
 		// Hack to ensure to get a location
 		text = "Berlin " + new JenaExample().getDatasetText();
 
-		lang = new LanguageDetector().detectLanguageString(text);
+		lang = new LangDetector().detectLanguageString(text);
 
 		// The model of the language detector uses other language abbreviations than
 		// FOX, e.g. 'deu' and 'de'. This has to be mapped.
@@ -107,10 +107,8 @@ public class JenaExample {
 		// Distribution example
 
 		text = new JenaExample().getDistributionText();
-		lang = new LanguageDetector().detectLanguageString(text);
-		// The model of the language detector uses other language abbreviations than
-		// FOX, e.g. 'deu' and 'de'. This has to be mapped.
-		if (lang.equals("deu")) {
+		lang = new LangDetector().detectLanguageString(text);
+		if (lang.equals(LangDetector.LANG_DEU)) {
 			entities = new org.dice_research.opal.metadata_extraction.fox.Fox().setEndpoint(FOX_API_ENDPOINT).send(text,
 					Fox.LANG_DE);
 		} else {

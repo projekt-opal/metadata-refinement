@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.dice_research.opal.metadata_extraction.lang_detection.LanguageDetector;
+import org.dice_research.opal.metadata_extraction.lang_detection.LangDetector;
 
 @Path("lang")
 @RequestScoped
@@ -29,7 +29,7 @@ public class LangService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response add(@QueryParam("text") String text) {
 		try {
-			return Response.ok(new LanguageDetector().detectLanguageString(text)).build();
+			return Response.ok(new LangDetector().detectLanguageString(text)).build();
 		} catch (IOException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}

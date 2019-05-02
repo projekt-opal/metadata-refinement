@@ -13,9 +13,17 @@ import opennlp.tools.langdetect.LanguageDetectorModel;
 /**
  * Detects language of texts based on OpenLNP default model.
  * 
+ * The OpenNLP default model file is downloaded at the first run.
+ * 
  * @author Adrian Wilke
  */
-public class LanguageDetector {
+public class LangDetector {
+
+	// https://www.apache.org/dist/opennlp/models/langdetect/1.8.3/README.txt
+	public final static String LANG_DEU = "deu";
+	public final static String LANG_ENG = "eng";
+	public final static String LANG_FRA = "fra";
+	public final static String LANG_SPA = "spa";
 
 	// http://opennlp.apache.org/models.html
 	private final static String MODEL_URL = "https://www-eu.apache.org/dist/opennlp/models/langdetect/1.8.3/langdetect-183.bin";
@@ -35,7 +43,8 @@ public class LanguageDetector {
 	}
 
 	/**
-	 * Detects a language.
+	 * Detects a language. The returned object also contains the confidence of the
+	 * detection.
 	 * 
 	 * @see http://opennlp.apache.org/models.html
 	 */
