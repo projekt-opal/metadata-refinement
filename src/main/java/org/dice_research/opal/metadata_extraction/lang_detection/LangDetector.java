@@ -47,6 +47,8 @@ public class LangDetector {
 	 * detection.
 	 * 
 	 * @see http://opennlp.apache.org/models.html
+	 * 
+	 * @throws IOException on errors reading the language model
 	 */
 	public Language detectLanguage(String text) throws IOException {
 
