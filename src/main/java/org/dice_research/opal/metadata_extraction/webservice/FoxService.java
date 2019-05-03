@@ -32,9 +32,9 @@ public class FoxService {
 		try {
 			String text = info.getQueryParameters().getFirst("text");
 			String lang = info.getQueryParameters().getFirst("lang");
-			org.dice_research.opal.metadata_extraction.fox.Fox fox = new org.dice_research.opal.metadata_extraction.fox.Fox()
+			org.dice_research.opal.metadata_extraction.fox.FoxRemote fox = new org.dice_research.opal.metadata_extraction.fox.FoxRemote()
 					.setEndpoint(FOX_API_ENDPOINT);
-			return Response.ok(fox.send(text, lang)).build();
+			return Response.ok(fox.request(text, lang)).build();
 		} catch (IOException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}

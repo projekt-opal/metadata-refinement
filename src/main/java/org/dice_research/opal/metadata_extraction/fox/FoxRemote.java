@@ -5,22 +5,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import org.json.JSONObject;
 
 /**
- * Based on FOX Java API
+ * FOX execution at remote endpoint.
  * 
- * @see https://github.com/dice-group/fox-java/blob/master/src/main/java/org/aksw/fox/binding/FoxApi.java
+ * @see Based on modifications of
+ *      https://github.com/dice-group/fox-java/blob/master/src/main/java/org/aksw/fox/binding/FoxApi.java
  *
  * @author Adrian Wilke
  * @author Ren&eacute; Speck <speck@informatik.uni-leipzig.de>
  */
-public class Fox {
+public class FoxRemote {
 
+	// https://github.com/dice-group/fox-java/blob/master/src/main/java/org/aksw/fox/binding/FoxParameter.java#L42
 	public static final String LANG_DE = "de";
 	public static final String LANG_EN = "en";
 	public static final String LANG_FR = "fr";
@@ -32,12 +33,17 @@ public class Fox {
 	/**
 	 * Sets FOX endpoint, e.g. http://localhost:4444/fox"
 	 */
-	public Fox setEndpoint(String endpoint) {
+	public FoxRemote setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
 		return this;
 	}
 
-	public String send(String text, String language) throws MalformedURLException, IOException {
+	/**
+	 * Sends request to FOX endpoint.
+	 * 
+	 * Returns results in TURTLE format.
+	 */
+	public String request(String text, String language) throws IOException {
 
 		if (endpoint == null) {
 			throw new NullPointerException("FOX endpoint not set!");

@@ -16,3 +16,7 @@
   [http://localhost:9080/metadata/lang/text?text=Sprachen lernen](http://localhost:9080/metadata/lang/text?text=Sprachen%20lernen)
 * Named Entity Recognition:  
   [http://localhost:9080/metadata/fox?text=A. Einstein was born in Ulm.&lang=en](http://localhost:9080/metadata/fox?text=A.%20Einstein%20was%20born%20in%20Ulm.&lang=en)
+
+## Notes
+
+* If there is no FOX endpoint available, the Dockerfile in directory docker can be used.

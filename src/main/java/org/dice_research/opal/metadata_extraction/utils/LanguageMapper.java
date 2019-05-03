@@ -3,7 +3,7 @@ package org.dice_research.opal.metadata_extraction.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.dice_research.opal.metadata_extraction.fox.Fox;
+import org.dice_research.opal.metadata_extraction.fox.FoxRemote;
 import org.dice_research.opal.metadata_extraction.lang_detection.LangDetector;
 
 import opennlp.tools.langdetect.LanguageDetector;
@@ -20,10 +20,10 @@ public abstract class LanguageMapper {
 	private final static Map<String, String> languageMap = new HashMap<String, String>();
 
 	static {
-		languageMap.put(LangDetector.LANG_DEU, Fox.LANG_DE);
-		languageMap.put(LangDetector.LANG_ENG, Fox.LANG_EN);
-		languageMap.put(LangDetector.LANG_FRA, Fox.LANG_FR);
-		languageMap.put(LangDetector.LANG_SPA, Fox.LANG_ES);
+		languageMap.put(LangDetector.LANG_DEU, FoxRemote.LANG_DE);
+		languageMap.put(LangDetector.LANG_ENG, FoxRemote.LANG_EN);
+		languageMap.put(LangDetector.LANG_FRA, FoxRemote.LANG_FR);
+		languageMap.put(LangDetector.LANG_SPA, FoxRemote.LANG_ES);
 	}
 
 	/**
