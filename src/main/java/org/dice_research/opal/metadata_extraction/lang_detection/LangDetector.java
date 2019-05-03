@@ -7,6 +7,7 @@ import java.net.URL;
 import org.apache.commons.io.FileUtils;
 
 import opennlp.tools.langdetect.Language;
+import opennlp.tools.langdetect.LanguageDetector;
 import opennlp.tools.langdetect.LanguageDetectorME;
 import opennlp.tools.langdetect.LanguageDetectorModel;
 
@@ -19,18 +20,19 @@ import opennlp.tools.langdetect.LanguageDetectorModel;
  */
 public class LangDetector {
 
+	// Language keys of OpenNLP model
 	// https://www.apache.org/dist/opennlp/models/langdetect/1.8.3/README.txt
 	public final static String LANG_DEU = "deu";
 	public final static String LANG_ENG = "eng";
 	public final static String LANG_FRA = "fra";
 	public final static String LANG_SPA = "spa";
 
+	// OpenNLP model
 	// http://opennlp.apache.org/models.html
 	private final static String MODEL_URL = "https://www-eu.apache.org/dist/opennlp/models/langdetect/1.8.3/langdetect-183.bin";
 	private final static String MODEL_FILENAME = "OpenNLP.model.langdetect-183.bin";
 
-	private static opennlp.tools.langdetect.LanguageDetector languageDetector;
-
+	private static LanguageDetector languageDetector;
 	private File modelFile;
 
 	/**
@@ -52,7 +54,7 @@ public class LangDetector {
 	 */
 	public Language detectLanguage(String text) throws IOException {
 
-		// Get model
+		// Get/download model
 		if (modelFile == null) {
 			modelFile = new File(MODEL_FILENAME);
 
@@ -62,7 +64,7 @@ public class LangDetector {
 			}
 		}
 
-		// Create detector
+		// Create static language detector instance
 		if (languageDetector == null) {
 			LanguageDetectorModel model = new LanguageDetectorModel(FileUtils.openInputStream(modelFile));
 			languageDetector = new LanguageDetectorME(model);

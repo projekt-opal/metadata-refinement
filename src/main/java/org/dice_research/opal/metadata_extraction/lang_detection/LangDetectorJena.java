@@ -2,26 +2,28 @@ package org.dice_research.opal.metadata_extraction.lang_detection;
 
 import java.io.IOException;
 
-import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
-import org.apache.jena.rdf.model.ResourceFactory;
-import org.dice_research.opal.common.constants.ISO_639_1;
+import org.apache.jena.vocabulary.DCAT;
+import org.apache.jena.vocabulary.RDF;
+import org.dice_research.opal.common.vocabulary.OpalLanguage;
 
 import opennlp.tools.langdetect.Language;
 
+/**
+ * Language detection of datasets in Jena model.
+ *
+ * @author Adrian Wilke
+ */
 public class LangDetectorJena {
 
 	private LangDetector langDetector = new LangDetector();
-	private final static Literal LITERAL_DE = ResourceFactory.createPlainLiteral(ISO_639_1.DE);
-	private final static Literal LITERAL_EN = ResourceFactory.createPlainLiteral(ISO_639_1.EN);
-	private final static Literal LITERAL_ES = ResourceFactory.createPlainLiteral(ISO_639_1.ES);
-	private final static Literal LITERAL_FR = ResourceFactory.createPlainLiteral(ISO_639_1.FR);
 
 	/**
+	 * Detects languages of metadata of datasets.
 	 * 
 	 * @throws IOException on errors reading the language model
 	 */
@@ -31,13 +33,13 @@ public class LangDetectorJena {
 		model = ModelFactory.createDefaultModel().add(model);
 
 		// Go through datasets
-		ResIterator datasetIterator = model.listSubjectsWithProperty(org.apache.jena.vocabulary.RDF.type,
-				org.apache.jena.vocabulary.DCAT.dataset);
+		ResIterator datasetIterator = model.listSubjectsWithProperty(RDF.type, DCAT.dataset);
 		StringBuilder stringBuilder = new StringBuilder();
 		while (datasetIterator.hasNext()) {
 			RDFNode dataset = datasetIterator.next();
 
-			// Collect natural language parts
+			// Collect natural language parts.
+			// Assumes there is exactly one title/description.
 
 			NodeIterator descriptionIterator = model.listObjectsOfProperty(dataset.asResource(),
 					org.apache.jena.vocabulary.DCTerms.description);
@@ -52,24 +54,22 @@ public class LangDetectorJena {
 				stringBuilder.append(titleIterator.next());
 			}
 
-			// Detect language
+			// Detect language of dataset and add it to model
 
 			if (stringBuilder.length() != 0) {
-				Language language = langDetector.detectLanguage(stringBuilder.toString());
-				String languageKey = language.getLang();
+				Language lang = langDetector.detectLanguage(stringBuilder.toString());
+				String languageKey = lang.getLang();
 
 				if (languageKey.equals(LangDetector.LANG_DEU)) {
-					model.addLiteral(dataset.asResource(), org.apache.jena.vocabulary.DCTerms.language, LITERAL_DE);
+					model.add(dataset.asResource(), OpalLanguage.language, OpalLanguage.LANGUAGE_DE);
 				} else if (languageKey.equals(LangDetector.LANG_ENG)) {
-					model.addLiteral(dataset.asResource(), org.apache.jena.vocabulary.DCTerms.language, LITERAL_EN);
+					model.add(dataset.asResource(), OpalLanguage.language, OpalLanguage.LANGUAGE_EN);
 				} else if (languageKey.equals(LangDetector.LANG_FRA)) {
-					model.addLiteral(dataset.asResource(), org.apache.jena.vocabulary.DCTerms.language, LITERAL_FR);
+					model.add(dataset.asResource(), OpalLanguage.language, OpalLanguage.LANGUAGE_FR);
 				} else if (languageKey.equals(LangDetector.LANG_SPA)) {
-					model.addLiteral(dataset.asResource(), org.apache.jena.vocabulary.DCTerms.language, LITERAL_ES);
+					model.add(dataset.asResource(), OpalLanguage.language, OpalLanguage.LANGUAGE_ES);
 				}
-
 			}
-
 		}
 
 		return model;

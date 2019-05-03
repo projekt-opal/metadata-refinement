@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import org.json.JSONObject;
 
 /**
- * Based on fox-java API
+ * Based on FOX Java API
  * 
  * @see https://github.com/dice-group/fox-java/blob/master/src/main/java/org/aksw/fox/binding/FoxApi.java
  *
