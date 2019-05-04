@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.dice_research.opal</groupId>
 			<artifactId>common</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.3</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.eclipse.microprofile/microprofile -->

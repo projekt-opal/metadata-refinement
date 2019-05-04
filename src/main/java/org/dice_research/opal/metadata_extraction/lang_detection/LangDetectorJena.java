@@ -7,6 +7,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.RDF;
 import org.dice_research.opal.common.vocabulary.OpalLanguage;
@@ -23,7 +24,10 @@ public class LangDetectorJena {
 	private LangDetector langDetector = new LangDetector();
 
 	/**
-	 * Detects languages of metadata of datasets.
+	 * Detects languages of metadata of datasets and adds them to model.
+	 * 
+	 * If the metadata is empty or if the language is not supported, no data will be
+	 * added to model.
 	 * 
 	 * @throws IOException on errors reading the language model
 	 */
@@ -58,20 +62,37 @@ public class LangDetectorJena {
 
 			if (stringBuilder.length() != 0) {
 				Language lang = langDetector.detectLanguage(stringBuilder.toString());
-				String languageKey = lang.getLang();
-
-				if (languageKey.equals(LangDetector.LANG_DEU)) {
-					model.add(dataset.asResource(), OpalLanguage.language, OpalLanguage.LANGUAGE_DE);
-				} else if (languageKey.equals(LangDetector.LANG_ENG)) {
-					model.add(dataset.asResource(), OpalLanguage.language, OpalLanguage.LANGUAGE_EN);
-				} else if (languageKey.equals(LangDetector.LANG_FRA)) {
-					model.add(dataset.asResource(), OpalLanguage.language, OpalLanguage.LANGUAGE_FR);
-				} else if (languageKey.equals(LangDetector.LANG_SPA)) {
-					model.add(dataset.asResource(), OpalLanguage.language, OpalLanguage.LANGUAGE_ES);
+				Resource languageResource = getLanguageResource(lang.getLang());
+				if (languageResource != null) {
+					model.add(dataset.asResource(), OpalLanguage.language, languageResource);
 				}
 			}
 		}
 
 		return model;
+	}
+
+	/**
+	 * Transforms ISO 639-3 code into ISO 639-1 URI
+	 * 
+	 * ISO 639-3 is used in OpenNLP model
+	 * https://www.apache.org/dist/opennlp/models/langdetect/1.8.3/README.txt
+	 * 
+	 * @param iso639_3code ISO 639-3 code
+	 * @return OPAL language resource (ISO 639-1 URI) or null
+	 */
+	private Resource getLanguageResource(String iso639_3code) {
+		if (iso639_3code.equals(ISO_639_3.CODE_DEU)) {
+			return OpalLanguage.LANGUAGE_DE;
+		} else if (iso639_3code.equals(ISO_639_3.CODE_ENG)) {
+			return OpalLanguage.LANGUAGE_EN;
+		} else if (iso639_3code.equals(ISO_639_3.CODE_FRA)) {
+			return OpalLanguage.LANGUAGE_FR;
+		} else if (iso639_3code.equals(ISO_639_3.CODE_SPA)) {
+			return OpalLanguage.LANGUAGE_ES;
+		} else {
+			return null;
+		}
+
 	}
 }

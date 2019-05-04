@@ -20,13 +20,6 @@ import opennlp.tools.langdetect.LanguageDetectorModel;
  */
 public class LangDetector {
 
-	// Language keys of OpenNLP model
-	// https://www.apache.org/dist/opennlp/models/langdetect/1.8.3/README.txt
-	public final static String LANG_DEU = "deu";
-	public final static String LANG_ENG = "eng";
-	public final static String LANG_FRA = "fra";
-	public final static String LANG_SPA = "spa";
-
 	// OpenNLP model
 	// http://opennlp.apache.org/models.html
 	private final static String MODEL_URL = "https://www-eu.apache.org/dist/opennlp/models/langdetect/1.8.3/langdetect-183.bin";
@@ -36,11 +29,11 @@ public class LangDetector {
 	private File modelFile;
 
 	/**
-	 * Detects a language and returns the representing String.
+	 * Detects a language and returns the representing String in ISO 639-3 code.
 	 * 
 	 * @see https://www.apache.org/dist/opennlp/models/langdetect/1.8.3/README.txt
 	 */
-	public String detectLanguageString(String text) throws IOException {
+	public String detectLanguageCode(String text) throws IOException {
 		return detectLanguage(text).getLang();
 	}
 

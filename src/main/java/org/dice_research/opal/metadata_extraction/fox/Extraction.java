@@ -23,12 +23,39 @@ public class Extraction {
 			.createProperty("http://www.w3.org/2005/11/its/rdf#taClassRef");
 	private static final Property TEXT_ANALYSIS_ID = ResourceFactory
 			.createProperty("http://www.w3.org/2005/11/its/rdf#taIdentRef");
+	private static final Property NIF_ANCHOR = ResourceFactory
+			.createProperty("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf");
 	private static final Resource LOCATION = ResourceFactory.createResource("http://schema.org/Location");
+
+	/**
+	 * Extracts location names from FOX turtle.
+	 */
+	public List<String> extractLocationNames(String turtle) {
+
+		// Read turtle to model
+
+		StringReader stringReader = new StringReader(turtle);
+		Model model = ModelFactory.createDefaultModel();
+		model.read(stringReader, null, "TTL");
+
+		// Extract locations
+
+		List<String> locationNames = new LinkedList<>();
+		ResIterator locationEntityIterator = model.listSubjectsWithProperty(TEXT_ANALYSIS_CLASS, LOCATION);
+		while (locationEntityIterator.hasNext()) {
+			Resource locationEntity = locationEntityIterator.next();
+			NodeIterator nameIterator = model.listObjectsOfProperty(locationEntity, NIF_ANCHOR);
+			while (nameIterator.hasNext()) {
+				locationNames.add(nameIterator.next().asLiteral().getString());
+			}
+		}
+		return locationNames;
+	}
 
 	/**
 	 * Extracts location URIs from FOX turtle.
 	 */
-	public List<String> extractLocations(String turtle) {
+	public List<String> extractLocationUris(String turtle) {
 
 		// Read turtle to model
 

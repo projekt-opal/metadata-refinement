@@ -13,6 +13,9 @@ import org.json.JSONObject;
 /**
  * FOX execution at remote endpoint.
  * 
+ * @see FOX API parameters
+ *      https://github.com/dice-group/fox-java/blob/master/src/main/java/org/aksw/fox/binding/FoxParameter.java
+ * 
  * @see Based on modifications of
  *      https://github.com/dice-group/fox-java/blob/master/src/main/java/org/aksw/fox/binding/FoxApi.java
  *
@@ -42,12 +45,10 @@ public class FoxRemote {
 	 * Sends request to FOX endpoint.
 	 * 
 	 * Returns results in TURTLE format.
+	 * 
+	 * @throws IOException on errors performing FOX remote request
 	 */
-	public String request(String text, String language) throws IOException {
-
-		if (endpoint == null) {
-			throw new NullPointerException("FOX endpoint not set!");
-		}
+	public String getTurtle(String text, String language) throws IOException {
 
 		final String body = new JSONObject()//
 				.put("input", text)
@@ -61,6 +62,22 @@ public class FoxRemote {
 				.put("output", "TURTLE")
 
 				.toString();
+
+		return request(body);
+	}
+
+	/**
+	 * Sends request to FOX endpoint.
+	 * 
+	 * Returns results in TURTLE format.
+	 * 
+	 * @throws IOException on errors performing FOX remote request
+	 */
+	private String request(String body) throws IOException {
+
+		if (endpoint == null) {
+			throw new NullPointerException("FOX endpoint not set!");
+		}
 
 		final StringBuilder data = new StringBuilder();
 		HttpURLConnection connection = null;

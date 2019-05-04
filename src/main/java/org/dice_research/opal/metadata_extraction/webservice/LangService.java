@@ -27,17 +27,18 @@ import org.dice_research.opal.metadata_extraction.lang_detection.LangDetectorJen
 public class LangService {
 
 	/**
-	 * Returns detected language of plain text.
+	 * Returns detected language of plain text. ISO 639-3 codes (3 characters) are
+	 * returned.
 	 * 
-	 * e.g. http://localhost:9080/metadata/lang/text?text=Sprachen%20lernen
+	 * e.g. http://localhost:9080/metadata/lang/getIso369_3?text=Sprachen%20lernen
 	 */
 	@GET
-	@Path("{text}")
+	@Path("{getIso369_3}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response add(@QueryParam("text") String text) {
+	public Response getIso369_3(@QueryParam("text") String text) {
 		try {
-			return Response.ok(new LangDetector().detectLanguageString(text)).build();
+			return Response.ok(new LangDetector().detectLanguageCode(text)).build();
 		} catch (IOException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
@@ -46,18 +47,18 @@ public class LangService {
 	/**
 	 * Detects language and adds it to Jena model.
 	 * 
-	 * e.g. http://localhost:9080/metadata/lang/model?bytes=...
+	 * e.g. http://localhost:9080/metadata/lang/addToModel?turtleBytes=...
 	 */
 	@GET
-	@Path("{model}")
+	@Path("{addToModel}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response addModel(@QueryParam("bytes") byte[] bytes) {
+	public Response addToModel(@QueryParam("turtleBytes") byte[] turtleBytes) {
 		try {
-			Model model = ModelSerialization.deserialize(bytes);
+			Model model = ModelSerialization.deserialize(turtleBytes);
 			model = new LangDetectorJena().addLanguage(model);
-			bytes = ModelSerialization.serialize(model);
-			return Response.ok(bytes).build();
+			turtleBytes = ModelSerialization.serialize(model);
+			return Response.ok(turtleBytes).build();
 		} catch (IOException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
