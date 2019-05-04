@@ -2,8 +2,8 @@
 
 This OPAL component extracts metadata from natural language texts.
 
-* **Named Entity Recognition** based on [FOX](https://github.com/dice-group/FOX)
 * **Language Detection** based on [Apache OpenNLP](https://opennlp.apache.org/)
+* **Named Entity Recognition** based on [FOX](https://github.com/dice-group/FOX)
 
 ## Installation
 
@@ -14,15 +14,20 @@ This OPAL component extracts metadata from natural language texts.
 * Start the webservices:  
   `java -jar metadata-extraction-service.jar`
 
-## Examples
+## Webservice examples
 
 * Language Detection:  
-    * [http://localhost:9080/metadata/lang/getIso369_3?text=Sprachen lernen](http://localhost:9080/metadata/lang/getIso369_3?text=Sprachen%20lernen)  
-    * [http://localhost:9080/metadata/lang/addToModel?turtleBytes=...](http://localhost:9080/metadata/lang/addToModel?turtleBytes=...)
+    * Returns detected language of plain text. ISO 639-3 codes (3 characters) are returned.  
+[http://localhost:9080/metadata/lang?text=Sprachen lernen](http://localhost:9080/metadata/lang?text=Sprachen%20lernen)
+    * Detects languages of metadata of datasets and adds them to model.  
+[http://localhost:9080/metadata/lang/model?turtleBytes=...](http://localhost:9080/metadata/lang/model?turtleBytes=...)
 * Named Entity Recognition:  
-    * [http://localhost:9080/metadata/fox/getTurtle?text=A.%20Einstein%20was%20born%20in%20Ulm.&lang=en](http://localhost:9080/metadata/fox/getTurtle?text=A.%20Einstein%20was%20born%20in%20Ulm.&lang=en)
-    * [http://localhost:9080/metadata/fox/getLocationNames?text=A.%20Einstein%20was%20born%20in%20Ulm.&lang=en](http://localhost:9080/metadata/fox/getLocationNames?text=A.%20Einstein%20was%20born%20in%20Ulm.&lang=en)
-    * [http://localhost:9080/metadata/fox/getLocationUris?text=A.%20Einstein%20was%20born%20in%20Ulm.&lang=en](http://localhost:9080/metadata/fox/getLocationUris?text=A.%20Einstein%20was%20born%20in%20Ulm.&lang=en)
+    * Returns FOX result in TURTLE format.  
+[http://localhost:9080/metadata/fox?text=A. Einstein was born in Ulm.&lang=en](http://localhost:9080/metadata/fox?text=A.%20Einstein%20was%20born%20in%20Ulm.&lang=en)
+    * Returns location names as JSON array.  
+[http://localhost:9080/metadata/fox/location/names?text=Paderborn und Bad Oeynhausen sind in NRW&lang=de](http://localhost:9080/metadata/fox/location/names?text=Paderborn%20und%20Bad%20Oeynhausen%20sind%20in%20NRW&lang=de)
+    * Returns location URIs as JSON array.  
+[http://localhost:9080/metadata/fox/location/uris?text=Paderborn und Bad Oeynhausen sind in NRW&lang=de](http://localhost:9080/metadata/fox/location/uris?text=Paderborn%20und%20Bad%20Oeynhausen%20sind%20in%20NRW&lang=de)
 
 ## Notes
 
