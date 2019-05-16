@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--
+OPAL http://projekt-opal.de/
+DICE https://dice.cs.uni-paderborn.de/ https://dice-research.org/
+Adrian Wilke
+
+https://stackoverflow.com/a/9304990
+http://jsfiddle.net/Vap7C/15/
+
+https://stackoverflow.com/a/19158690
+-->
+<html lang="en" id="html">
+<head>
+ <meta charset="utf-8">
+ <title>OPAL extraction tool</title>
+ <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+ <style>
+  body {
+   margin: 0;
+  }
+  
+  section {
+   height: 200px;
+   padding-top: 0px;
+  }
+  
+  .sticky {
+   background: orange;
+  }
+  
+  .fixed {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+  }
+  
+  #extracted {
+   width: 100%;
+   height: 200px;
+  }
+ </style>
+</head>
+
+<body id="body">
+ <section>
+  <div class="sticky">
+   <textarea id="extracted"></textarea>
+  </div>
+ </section>
+ <p class="clickable">
+Through mCLOUD, the Federal Ministry of Transport and Digital Infrastructure (BMVI) provides open data on a central platform, and from this a variety of innovative projects and companies have already benefited. However, the open data has its weaknesses. These include the fact that data sets are often provided and viewed as monolithic and independent of each other. This makes searching for relevant data difficult, let alone using it in innovative, data-driven applications. The OPAL project seeks to change that.
+ </p>
+
+ <script>
+  var stickyOffset = $('.sticky').offset().top;
+
+  $(window).scroll(function() {
+   var sticky = $('.sticky'),
+    scroll = $(window).scrollTop();
+
+   if (scroll >= stickyOffset) sticky.addClass('fixed');
+   else sticky.removeClass('fixed');
+  });
+
+  $(".clickable").click(function(e) {
+   s = window.getSelection();
+   var range = s.getRangeAt(0);
+   var node = s.anchorNode;
+   while (range.toString().indexOf(' ') != 0) {
+    range.setStart(node, (range.startOffset - 1));
+   }
+   range.setStart(node, range.startOffset + 1);
+   do {
+    range.setEnd(node, range.endOffset + 1);
+
+   } while (range.toString().indexOf(' ') == -1 && range.toString().trim() != '');
+   var str = range.toString().trim();
+   /*alert(str);*/
+   $('#extracted').append(str).append('\n');
+  });
+ </script>
+
+</body>
+
+</html>
