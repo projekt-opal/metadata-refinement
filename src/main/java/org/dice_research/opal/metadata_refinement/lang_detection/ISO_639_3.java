@@ -1,4 +1,4 @@
-package org.dice_research.opal.metadata_extraction.lang_detection;
+package org.dice_research.opal.metadata_refinement.lang_detection;
 
 /**
  * ISO 639-3

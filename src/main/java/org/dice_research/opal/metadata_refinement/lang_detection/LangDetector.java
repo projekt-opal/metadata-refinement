@@ -1,10 +1,12 @@
-package org.dice_research.opal.metadata_extraction.lang_detection;
+package org.dice_research.opal.metadata_refinement.lang_detection;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import opennlp.tools.langdetect.Language;
 import opennlp.tools.langdetect.LanguageDetector;
@@ -16,9 +18,13 @@ import opennlp.tools.langdetect.LanguageDetectorModel;
  * 
  * The OpenNLP default model file is downloaded at the first run.
  * 
+ * @see https://www.apache.org/dist/opennlp/models/langdetect/1.8.3/README.txt
+ * 
  * @author Adrian Wilke
  */
 public class LangDetector {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	// OpenNLP model
 	// http://opennlp.apache.org/models.html
@@ -27,15 +33,6 @@ public class LangDetector {
 
 	private static LanguageDetector languageDetector;
 	private File modelFile;
-
-	/**
-	 * Detects a language and returns the representing String in ISO 639-3 code.
-	 * 
-	 * @see https://www.apache.org/dist/opennlp/models/langdetect/1.8.3/README.txt
-	 */
-	public String detectLanguageCode(String text) throws IOException {
-		return detectLanguage(text).getLang();
-	}
 
 	/**
 	 * Detects a language. The returned object also contains the confidence of the
@@ -52,7 +49,7 @@ public class LangDetector {
 			modelFile = new File(MODEL_FILENAME);
 
 			if (!modelFile.exists()) {
-				System.out.println("Downloading " + modelFile.getPath());
+				LOGGER.info("Downloading language model to " + modelFile.getPath());
 				FileUtils.copyURLToFile(new URL(MODEL_URL), modelFile, 5000, 5000);
 			}
 		}
