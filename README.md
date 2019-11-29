@@ -27,7 +27,8 @@ Add the following lines to your `pom.xml` configuration file:
 			<url>http://maven.aksw.org/archiva/repository/snapshots</url>
 		</repository>
 	</repositories>
-
+	
+Available versions are listed at [maven.aksw.org](https://maven.aksw.org/archiva/#advancedsearch~internal/org.dice-research.opal~metadata-refinement~~~~~30).
 
 ## Example
 
