@@ -21,7 +21,7 @@ import org.dice_research.opal.metadata.lang.LangDetector;
 import opennlp.tools.langdetect.Language;
 
 /**
- * Updates language tags of titles and descriptions.
+ * Updates language tags of title and description literals.
  *
  * @author Adrian Wilke
  */
@@ -80,7 +80,7 @@ public class LanguageDetection implements JenaModelProcessor {
 	 * 
 	 * @throws IOException on language detection errors
 	 */
-	protected Literal updateLanguageTag(Literal literal, double requiredConfidence) throws IOException {
+	protected Literal updateLanguageTag(Literal literal, double requiredConfidence) throws Exception {
 		if (literal.getLanguage().isEmpty()) {
 			Language lang = predictsupportedLanguage(literal.getString());
 			if (lang != null && lang.getConfidence() >= requiredConfidence) {
@@ -100,7 +100,7 @@ public class LanguageDetection implements JenaModelProcessor {
 	 * 
 	 * @throws IOException on language detection errors
 	 */
-	protected Language predictsupportedLanguage(String text) throws IOException {
+	protected Language predictsupportedLanguage(String text) throws Exception {
 
 		initialize();
 
@@ -119,13 +119,18 @@ public class LanguageDetection implements JenaModelProcessor {
 	}
 
 	/**
-	 * Sets class vaiables.
+	 * Initializes the component.
+	 * 
+	 * Will download the required language model (10 MB) on first run.
+	 * 
+	 * @throws Exception On errors at initialization
 	 */
-	protected void initialize() {
+	public void initialize() throws Exception {
 
 		// Will download language model (10 MB) on first run.
 		if (LanguageDetection.langDetector == null) {
 			LanguageDetection.langDetector = new LangDetector();
+			LanguageDetection.langDetector.initialize();
 		}
 
 		// Initialize supported languages

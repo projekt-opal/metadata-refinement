@@ -1,0 +1,59 @@
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix sq-a:  <http://w3id.org/squirrel/activity#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sq-m:  <http://w3id.org/squirrel/metadata> .
+@prefix sq-g:  <http://w3id.org/squirrel/graph#> .
+@prefix sq-s:  <http://w3id.org/squirrel/status#> .
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+@prefix sq-w:  <http://w3id.org/squirrel/worker#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix sq:    <http://w3id.org/squirrel/vocab#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://projekt-opal.de/catalog/europeandataportal>
+        a             dcat:Catalog ;
+        dcat:dataset  <http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701> .
+
+<http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701>
+        a                      dcat:Dataset ;
+        dc:accrualPeriodicity  <http://publications.europa.eu/resource/authority/frequency/UNKNOWN> ;
+        dc:description         "The Corine Land Cover datasets CLC2000, CLC2006and CLC change 2000-2006areproduced within the frame of the GMES land monitoringproject.Corine Land Cover (CLC) provides consistent information on land cover and land cover changes across Europe. This inventory was initiated in 1985 (reference year 1990) and established a time series of land cover information with updates in 2000 and 2006.CLC products are based on photointerpretation of satellite images by national teams of participating countries - the EEA member and cooperating countries – following a standard methodology and nomenclature with the following base parameters: 44 classes in the hierarchical three level Corine nomenclature; minimum mapping unit (MMU) for status layers is 25 hectares; minimum width of linear elements is 100 metres; minimum mapping unit (MMU) for Land Cover Changes (LCC) for the change layers is 5 hectares. The resulting national land cover inventories are further integrated into a seamless land cover map of Europe.Land cover and land use (LCLU) information is important not only for land change research, but also more broadly for the monitoring of environmental change, policy support, the creation of environmental indicators and reporting. CLC datasets provide important datasets supporting the implementation of key priority areas of the Environment Action Programmes of the European Union as protecting ecosystems, halting the loss of biological diversity, tracking the impacts of climate change, assessing developments in agriculture and implementing the EU Water Framework Directive, among others.More about the Corine Land Cover (CLC) and Copernicus land monitoring data in general can be found at http://land.copernicus.eu/." ;
+        dc:identifier          "{3DFF988D-59D2-415D-B2DA-818E8EF31117}" , "{CE1CBDCB-2D94-44C8-9D23-2A8F0D0F1F28}" ;
+        dc:language            <http://publications.europa.eu/resource/authority/language/ENG> ;
+        dc:modified            "2009-07-02T00:00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+        dc:provenance          <http://rdlib.net/.well-known/genid/rdflib/N792b92e77204476aa63ad4fe9d2587f3> ;
+        dc:spatial             <http://rdlib.net/.well-known/genid/rdflib/Nf11f47df658449a2bbe811e8ed99e520> ;
+        dc:title               "CORINE land cover Iceland \"clc00_is\"" ;
+        <http://www.w3.org/ns/adms#identifier>
+                "a4ee1c79-262e-4d98-9c22-0b331f34c6cd" ;
+        dcat:contactPoint      <http://rdlib.net/.well-known/genid/rdflib/N043abe3af3c142d9b86265c5c02e60d3> ;
+        dcat:distribution      <http://projekt-opal.de/distribution/http___europeandataportal_eu_set_distribution_7a90cfe9_6060_4d4e_989c_de01bba5b1c5> , <http://projekt-opal.de/distribution/http___europeandataportal_eu_set_distribution_e646caed_6766_475b_bc4b_2b7a93fe2dd1> ;
+        dcat:keyword           "Iceland" , "Downloadable Data" , "land use" , "land cover" .
+
+<http://rdlib.net/.well-known/genid/rdflib/Nf11f47df658449a2bbe811e8ed99e520>
+        a       dc:Location ;
+        <http://www.w3.org/ns/locn#geometry>
+                "{\"type\": \"Polygon\", \"coordinates\": [[[-25.790734,66.793485],[-12.209266,66.793485],[-12.209266,63.079536],[-25.790734,63.079536],[-25.790734,66.793485]]]}"^^<https://www.iana.org/assignments/media-types/application/vnd.geo+json> .
+
+<http://projekt-opal.de/distribution/http___europeandataportal_eu_set_distribution_7a90cfe9_6060_4d4e_989c_de01bba5b1c5>
+        a               dcat:Distribution ;
+        dc:rights       <http://rdlib.net/.well-known/genid/rdflib/Nbbbc6329057b4374970dcc07d02089d6> ;
+        dcat:accessURL  <http://atlas.lmi.is/LmiData> .
+
+<http://projekt-opal.de/distribution/http___europeandataportal_eu_set_distribution_e646caed_6766_475b_bc4b_2b7a93fe2dd1>
+        a               dcat:Distribution ;
+        dc:rights       <http://rdlib.net/.well-known/genid/rdflib/Nb8190ec90c984e8c80acc71c27e6efaa> ;
+        dcat:accessURL  <http://gis.lmi.is/geoserver/wfs> .
+
+<http://rdlib.net/.well-known/genid/rdflib/N792b92e77204476aa63ad4fe9d2587f3>
+        a           dc:ProvenanceStatement ;
+        rdfs:label  "Iceland joined the CORINE project in 2007 and the CLC2006 classification was finished in December 2008. It was the first CLC classification to be implemented for the country. Concurrently with the CLC2006 mapping data and information on land cover changes between 2006 and 2000 were compiled and CLC2000 and CLC-Changes databases were produced by down-dating the CLC2006 results. Satellite images acquired from the datasets image2000 and image2006 served as the basis for image interpretation. Topographic maps, GoogleEarth, high resolution SPOT-images and high resolution public map services (e.g. ja.is) were used to support the interpretation process. ArcGis 9.3 software was used for computer assisted visual photo-interpretation. In December 2008 the final report for CLC2006 in Iceland (Grant agreement 3601/B2007. EEA53004) was sent to the European Environment Agency. After CLC2006 final report was delivered some errors and inaccuracies were found in the database and corrected. After the CLC2000 and CLCChanges databases were finished they were uploaded on the Central Data Repository (CDR) at EEA along with the new and corrected version of the CLC2006." .
+
+<http://rdlib.net/.well-known/genid/rdflib/N043abe3af3c142d9b86265c5c02e60d3>
+        a       <http://www.w3.org/2006/vcard/ns#Organization> ;
+        <http://www.w3.org/2006/vcard/ns#fn>
+                "European Environment Agency, Kongens Nytorv 6, 1050 Copenhagen, K, Denmark" ;
+        <http://www.w3.org/2006/vcard/ns#hasEmail>
+                <mailto:eea.enquiries@eea.europa.eu> .

@@ -65,7 +65,7 @@ public class LangDetector {
 	/**
 	 * Downloads model, if not available. Creates library instance.
 	 */
-	private void initialize() throws MalformedURLException, IOException {
+	public void initialize() throws MalformedURLException, IOException {
 
 		// Get/download model
 		if (modelFile == null) {

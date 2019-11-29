@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>OPAL metadata refinement</name>
-	<description>OPAL metadata refinement</description>
+	<description>OPAL component to refine DCAT data</description>
 	<groupId>org.dice-research.opal</groupId>
 	<artifactId>metadata-refinement</artifactId>
 
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>org.dice-research.opal</groupId>
 			<artifactId>common</artifactId>
-			<version>[1,2)</version>
+			<version>[1.0.7.3,2)</version>
 		</dependency>
 
 

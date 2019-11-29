@@ -1,11 +1,5 @@
-# OPAL metadata refinement
+package org.dice_research.opal.metadata.example;
 
-* **Language Detection** based on [Apache OpenNLP](https://opennlp.apache.org/)
-
-
-## Usage
-
-```Java
 import java.io.File;
 
 import org.apache.jena.rdf.model.Model;
@@ -41,19 +35,3 @@ public class Example {
 		FileHandler.export(turtleOutputFile, model);
 	}
 }
-
-```
-
-
-
-## Note
-
-Version 1 can be found at [metadata-version-1](https://github.com/projekt-opal/metadata-extraction/tree/metadata-version-1).
-
-
-
-## Credits
-
-[Data Science Group (DICE)](https://dice-research.org/) at [Paderborn University](https://www.uni-paderborn.de/)
-
-This work has been supported by the German Federal Ministry of Transport and Digital Infrastructure (BMVI) in the project [Open Data Portal Germany (OPAL)](http://projekt-opal.de/) (funding code 19F2028A).
