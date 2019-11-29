@@ -73,7 +73,7 @@ public class Example {
 
 ## Note
 
-Version 1 can be found at [branch metadata-version-1](https://github.com/projekt-opal/metadata-extraction/tree/metadata-version-1).
+Version alpha can be found at [metadata-alpha](https://github.com/projekt-opal/metadata-extraction/tree/metadata-alpha).
 It includes 
 Language Detection based on Apache OpenNLP,
 Named Entity Recognition based on FOX, and
