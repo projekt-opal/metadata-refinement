@@ -1,7 +1,9 @@
 package org.dice_research.opal.metadata_refinement.lang_detection;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
@@ -35,14 +37,35 @@ public class LangDetector {
 	private File modelFile;
 
 	/**
-	 * Detects a language. The returned object also contains the confidence of the
+	 * Predicts a language. The returned object also contains the confidence of the
 	 * detection.
 	 * 
 	 * @see http://opennlp.apache.org/models.html
 	 * 
 	 * @throws IOException on errors reading the language model
 	 */
-	public Language detectLanguage(String text) throws IOException {
+	public Language predictLanguage(String text) throws IOException {
+		initialize();
+		return languageDetector.predictLanguage(text);
+	}
+
+	/**
+	 * Predicts languages. The returned object also contains the confidence of the
+	 * detection.
+	 * 
+	 * @see http://opennlp.apache.org/models.html
+	 * 
+	 * @throws IOException on errors reading the language model
+	 */
+	public Language[] predictLanguages(String text) throws IOException {
+		initialize();
+		return languageDetector.predictLanguages(text);
+	}
+
+	/**
+	 * Downloads model, if not available. Creates library instance.
+	 */
+	private void initialize() throws MalformedURLException, IOException {
 
 		// Get/download model
 		if (modelFile == null) {
@@ -54,13 +77,13 @@ public class LangDetector {
 			}
 		}
 
-		// Create static language detector instance
+		// Create language detector instance
 		if (languageDetector == null) {
-			LanguageDetectorModel model = new LanguageDetectorModel(FileUtils.openInputStream(modelFile));
+			FileInputStream fileInputStream = FileUtils.openInputStream(modelFile);
+			LanguageDetectorModel model = new LanguageDetectorModel(fileInputStream);
 			languageDetector = new LanguageDetectorME(model);
+			fileInputStream.close();
 		}
 
-		// Get best language
-		return languageDetector.predictLanguage(text);
 	}
 }

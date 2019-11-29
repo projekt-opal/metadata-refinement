@@ -28,6 +28,8 @@
 		</dependency>
 
 
+		<!-- Specific -->
+
 		<!-- https://mvnrepository.com/artifact/org.apache.opennlp/opennlp-tools -->
 		<dependency>
 			<groupId>org.apache.opennlp</groupId>
@@ -76,7 +78,20 @@
 			<version>[4.12,5)</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
+	<repositories>
+		<repository>
+			<id>maven.aksw.internal</id>
+			<name>AKSW Repository</name>
+			<url>http://maven.aksw.org/archiva/repository/internal</url>
+		</repository>
+		<repository>
+			<id>maven.aksw.snapshots</id>
+			<name>AKSW Snapshot Repository</name>
+			<url>http://maven.aksw.org/archiva/repository/snapshots</url>
+		</repository>
+	</repositories>
 
 </project>

@@ -1,6 +1,9 @@
 package org.dice_research.opal.metadata;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
@@ -24,22 +27,20 @@ import opennlp.tools.langdetect.Language;
  */
 public class LanguageDetection implements JenaModelProcessor {
 
-	protected static LangDetector langDetector;
-	protected final static double REQUIRED_CONFIDENCE_TITLE = 0.03;
+	protected final static double REQUIRED_CONFIDENCE_TITLE = 0.01;
 	protected final static double REQUIRED_CONFIDENCE_DESCRIPTION = 0.75;
+
+	protected static LangDetector langDetector;
+	protected static Map<String, String> supportedLanguages;
+	protected static Set<String> supportedIso_639_3;
 
 	@Override
 	public Model process(Model model, String datasetUri) throws Exception {
 
-		// Initialize.
-		// Will download language model (10 MB) on first run.
-		if (LanguageDetection.langDetector == null) {
-			LanguageDetection.langDetector = new LangDetector();
-		}
+		initialize();
 
 		// Create a new model
 		model = ModelFactory.createDefaultModel().add(model);
-
 		Resource dataset = ResourceFactory.createResource(datasetUri);
 
 		// Set language tag for title
@@ -81,19 +82,68 @@ public class LanguageDetection implements JenaModelProcessor {
 	 */
 	protected Literal updateLanguageTag(Literal literal, double requiredConfidence) throws IOException {
 		if (literal.getLanguage().isEmpty()) {
-			Language lang = langDetector.detectLanguage(literal.getString());
-			if (lang.getConfidence() >= requiredConfidence) {
-				if (lang.getLang().equals(ISO_639_3.CODE_DEU)) {
-					return ResourceFactory.createLangLiteral(literal.getString(), ISO_639_1.CODE_DE);
-				} else if (lang.getLang().equals(ISO_639_3.CODE_ENG)) {
-					return ResourceFactory.createLangLiteral(literal.getString(), ISO_639_1.CODE_EN);
-				} else if (lang.getLang().equals(ISO_639_3.CODE_FRA)) {
-					return ResourceFactory.createLangLiteral(literal.getString(), ISO_639_1.CODE_FR);
-				} else if (lang.getLang().equals(ISO_639_3.CODE_SPA)) {
-					return ResourceFactory.createLangLiteral(literal.getString(), ISO_639_1.CODE_ES);
-				}
+			Language lang = predictsupportedLanguage(literal.getString());
+			if (lang != null && lang.getConfidence() >= requiredConfidence) {
+				return ResourceFactory.createLangLiteral(literal.getString(),
+						LanguageDetection.supportedLanguages.get(lang.getLang()));
 			}
 		}
 		return literal;
+	}
+
+	/**
+	 * Predicts language.
+	 * 
+	 * The returned object also contains the confidence of the detection.
+	 * 
+	 * @return predicted language or null
+	 * 
+	 * @throws IOException on language detection errors
+	 */
+	public Language predictsupportedLanguage(String text) throws IOException {
+
+		initialize();
+
+		// Get highest confidence for supported languages
+		Language predictedLanguage = null;
+		Language[] languages = LanguageDetection.langDetector.predictLanguages(text);
+		for (Language language : languages) {
+			if (LanguageDetection.supportedIso_639_3.contains(language.getLang())) {
+				if (predictedLanguage == null || language.getConfidence() >= predictedLanguage.getConfidence()) {
+					predictedLanguage = language;
+				}
+			}
+		}
+
+		return predictedLanguage;
+	}
+
+	/**
+	 * Sets class vaiables.
+	 */
+	protected void initialize() {
+
+		// Will download language model (10 MB) on first run.
+		if (LanguageDetection.langDetector == null) {
+			LanguageDetection.langDetector = new LangDetector();
+		}
+
+		// Initialize supported languages
+		if (LanguageDetection.supportedLanguages == null) {
+			LanguageDetection.supportedLanguages = getSupportedLanguages();
+			LanguageDetection.supportedIso_639_3 = supportedLanguages.keySet();
+		}
+	}
+
+	/**
+	 * Gets mapping ISO-639-3 to ISO-639-1 of supported languages.
+	 */
+	protected Map<String, String> getSupportedLanguages() {
+		Map<String, String> map = new HashMap<>();
+		map.put(ISO_639_3.CODE_DEU, ISO_639_1.CODE_DE);
+		map.put(ISO_639_3.CODE_ENG, ISO_639_1.CODE_EN);
+		map.put(ISO_639_3.CODE_FRA, ISO_639_1.CODE_FR);
+		map.put(ISO_639_3.CODE_SPA, ISO_639_1.CODE_ES);
+		return map;
 	}
 }
