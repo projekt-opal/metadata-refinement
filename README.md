@@ -3,15 +3,13 @@
 * **Language Detection** based on [Apache OpenNLP](https://opennlp.apache.org/)
 
 
-## Usage
+## Example
 
 ```Java
 import java.io.File;
-
 import org.apache.jena.rdf.model.Model;
 import org.dice_research.opal.common.utilities.FileHandler;
 import org.dice_research.opal.metadata.LanguageDetection;
-
 public class Example {
 
 	/**
@@ -48,7 +46,7 @@ public class Example {
 
 ## Note
 
-Version 1 can be found at [metadata-version-1](https://github.com/projekt-opal/metadata-extraction/tree/metadata-version-1).
+Version 1 can be found at [branch metadata-version-1](https://github.com/projekt-opal/metadata-extraction/tree/metadata-version-1).
 
 
 
