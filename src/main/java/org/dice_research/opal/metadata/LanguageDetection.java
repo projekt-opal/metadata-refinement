@@ -15,8 +15,8 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.DCTerms;
 import org.dice_research.opal.common.constants.ISO_639_1;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
-import org.dice_research.opal.metadata_refinement.lang_detection.ISO_639_3;
-import org.dice_research.opal.metadata_refinement.lang_detection.LangDetector;
+import org.dice_research.opal.metadata.lang.ISO_639_3;
+import org.dice_research.opal.metadata.lang.LangDetector;
 
 import opennlp.tools.langdetect.Language;
 
@@ -100,7 +100,7 @@ public class LanguageDetection implements JenaModelProcessor {
 	 * 
 	 * @throws IOException on language detection errors
 	 */
-	public Language predictsupportedLanguage(String text) throws IOException {
+	protected Language predictsupportedLanguage(String text) throws IOException {
 
 		initialize();
 

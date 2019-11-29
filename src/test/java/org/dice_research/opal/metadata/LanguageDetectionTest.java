@@ -12,7 +12,9 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
-import org.dice_research.opal.metadata_refinement.lang_detection.LangDetector;
+import org.dice_research.opal.metadata.LanguageDetection;
+import org.dice_research.opal.metadata.lang.LangDetector;
+import org.dice_research.opal.metadata.lang.TestData;
 import org.junit.Test;
 
 import opennlp.tools.langdetect.Language;

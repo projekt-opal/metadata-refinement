@@ -1,4 +1,4 @@
-package org.dice_research.opal.metadata;
+package org.dice_research.opal.metadata.lang;
 
 public abstract class TestData {
 

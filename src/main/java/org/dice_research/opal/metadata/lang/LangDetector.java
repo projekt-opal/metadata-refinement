@@ -1,4 +1,4 @@
-package org.dice_research.opal.metadata_refinement.lang_detection;
+package org.dice_research.opal.metadata.lang;
 
 import java.io.File;
 import java.io.FileInputStream;

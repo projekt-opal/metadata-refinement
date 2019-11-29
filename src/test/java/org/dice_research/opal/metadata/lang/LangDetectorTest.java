@@ -1,10 +1,10 @@
-package org.dice_research.opal.metadata;
+package org.dice_research.opal.metadata.lang;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
-import org.dice_research.opal.metadata_refinement.lang_detection.LangDetector;
+import org.dice_research.opal.metadata.lang.LangDetector;
 import org.junit.Test;
 
 import opennlp.tools.langdetect.Language;
