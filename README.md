@@ -3,6 +3,32 @@
 * **Language Detection** based on [Apache OpenNLP](https://opennlp.apache.org/)
 
 
+## Usage with Apache Maven
+
+Add the following lines to your `pom.xml` configuration file:
+
+	<dependencies>
+		<dependency>
+			<groupId>org.dice-research.opal</groupId>
+			<artifactId>metadata-refinement</artifactId>
+			<version>[1,2)</version>
+		</dependency>
+	</dependencies>
+	
+	<repositories>
+		<repository>
+			<id>maven.aksw.internal</id>
+			<name>AKSW Repository</name>
+			<url>http://maven.aksw.org/archiva/repository/internal</url>
+		</repository>
+		<repository>
+			<id>maven.aksw.snapshots</id>
+			<name>AKSW Snapshot Repository</name>
+			<url>http://maven.aksw.org/archiva/repository/snapshots</url>
+		</repository>
+	</repositories>
+
+
 ## Example
 
 ```Java
@@ -47,7 +73,11 @@ public class Example {
 ## Note
 
 Version 1 can be found at [branch metadata-version-1](https://github.com/projekt-opal/metadata-extraction/tree/metadata-version-1).
-
+It includes 
+Language Detection based on Apache OpenNLP,
+Named Entity Recognition based on FOX, and
+a JavaScript word picker
+as well as configurations for Docker usage and webservices.
 
 
 ## Credits
