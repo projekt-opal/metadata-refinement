@@ -106,5 +106,5 @@
 			<url>http://maven.aksw.org/archiva/repository/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
+
 </project>

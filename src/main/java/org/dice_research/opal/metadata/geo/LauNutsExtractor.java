@@ -3,7 +3,7 @@ package org.dice_research.opal.metadata.geo;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +20,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.SKOS;
 import org.dice_research.opal.common.utilities.FileHandler;
+import org.dice_research.opal.metadata.GeoData;
 
 /**
  * Extracts LauNuts data (place-label, latitude, longitude) to file.
@@ -34,6 +35,8 @@ import org.dice_research.opal.common.utilities.FileHandler;
 public class LauNutsExtractor {
 
 	public static final String VERSION_0_3_0 = "0.3.0";
+	public static final boolean RESTRICT_TO_ONE_WORD = true;
+	public static final boolean LABELS_TO_LOWER_CASE = false;
 
 	public static final String NS_LAUNUTS = "http://projekt-opal.de/launuts/";
 	public static final Resource RES_NUTS = ResourceFactory.createResource(NS_LAUNUTS + "NUTS");
@@ -54,32 +57,13 @@ public class LauNutsExtractor {
 			System.exit(1);
 		} else {
 			File inFile = new File(args[0]);
-			File outFile = new File("src/main/resources/places-germany.txt");
+			File outFile = new File("src/main/resources/" + GeoData.PLACES_FILE);
 			if (inFile.canRead()) {
 				new LauNutsExtractor().extract(inFile, outFile, VERSION_0_3_0);
 			} else {
 				System.err.println("Can not read: " + inFile.getAbsolutePath());
 				System.exit(1);
 			}
-		}
-	}
-
-	/**
-	 * Data container.
-	 */
-	public class Container {
-		public String uri;
-		public String label;
-		public float lat;
-		public float lon;
-
-		@Override
-		public String toString() {
-			return label + " " + lat + " " + lon;
-		}
-
-		public boolean isValid() {
-			return (!label.isEmpty() && lat != 0 && lon != 0);
 		}
 	}
 
@@ -111,13 +95,13 @@ public class LauNutsExtractor {
 		}
 
 		// Map for containers to ensure every label is unique
-		Map<String, Container> containerMap = new HashMap<>();
+		Map<String, GeoContainer> containerMap = new HashMap<>();
 
 		// Extract NUTS
 		ResIterator resIterator = model.listSubjectsWithProperty(RDF.type, RES_NUTS);
 		while (resIterator.hasNext()) {
-			Container container = extract(resIterator.next());
-			if (container.isValid()) {
+			GeoContainer container = extract(resIterator.next());
+			if (container.isComplete()) {
 				containerMap.put(container.label, container);
 			}
 		}
@@ -125,30 +109,19 @@ public class LauNutsExtractor {
 		// Extract LAU
 		resIterator = model.listSubjectsWithProperty(RDF.type, RES_LAU);
 		while (resIterator.hasNext()) {
-			Container container = extract(resIterator.next());
-			if (container.isValid()) {
+			GeoContainer container = extract(resIterator.next());
+			if (container.isComplete()) {
 				containerMap.put(container.label, container);
 			}
 		}
 
 		// Longer labels first
-		ArrayList<Container> containers = new ArrayList<>(containerMap.values());
-		containers.sort(new Comparator<Container>() {
-			@Override
-			public int compare(Container o1, Container o2) {
-				if (o1.label.length() > o2.label.length()) {
-					return -1;
-				} else if (o1.label.length() < o2.label.length()) {
-					return 1;
-				} else {
-					return o1.label.compareTo(o2.label);
-				}
-			}
-		});
+		ArrayList<GeoContainer> containers = new ArrayList<>(containerMap.values());
+		Collections.sort(containers);
 
 		// Lazy transform
 		List<String> lines = new ArrayList<>(containers.size() * 3);
-		for (Container container : containers) {
+		for (GeoContainer container : containers) {
 			lines.add(container.label);
 			lines.add(String.valueOf(container.lat));
 			lines.add(String.valueOf(container.lon));
@@ -165,16 +138,34 @@ public class LauNutsExtractor {
 	/**
 	 * Extracts data to container.
 	 */
-	private Container extract(Resource resource) {
-		Container container = new Container();
-		container.uri = resource.getURI();
+	private GeoContainer extract(Resource resource) {
+		GeoContainer container = new GeoContainer();
 
 		if (resource.hasProperty(SKOS.prefLabel)) {
-			container.label = resource.getProperty(SKOS.prefLabel).getObject().asLiteral().getString().trim()
-					.toLowerCase();
+			String label = resource.getProperty(SKOS.prefLabel).getObject().asLiteral().getString().trim();
+
+			if (LABELS_TO_LOWER_CASE) {
+				label = label.toLowerCase();
+			}
+
+			if (RESTRICT_TO_ONE_WORD) {
+				if (LABELS_TO_LOWER_CASE) {
+					if (!label.matches("[a-z\\x7f-\\xff]{3,}")) {
+						return container;
+					}
+				} else {
+					if (!label.matches("[A-Za-z\\x7f-\\xff]{3,}")) {
+						return container;
+					}
+				}
+			}
+
+			container.label = label;
 		}
 
-		if (resource.hasProperty(SKOS.relatedMatch)) {
+		if (resource.hasProperty(SKOS.relatedMatch))
+
+		{
 			RDFNode placeNode = resource.getProperty(SKOS.relatedMatch).getObject();
 			if (placeNode.isResource()) {
 				Resource place = placeNode.asResource();

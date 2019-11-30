@@ -11,4 +11,5 @@ public abstract class TestData {
 	public static final String DE4 = "10-Minuten Stationsdaten: Extrem-Temperatur";
 	public static final String DE5 = "Zehn Minuten Stationsdaten: Die sehr hohen Temperaturen";
 
+	public static final String DE6 = "Temperatur in Übereisenbach und Berlin";
 }
