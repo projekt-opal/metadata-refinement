@@ -13,32 +13,52 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.DCTerms;
+import org.apache.jena.vocabulary.RDF;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
 import org.dice_research.opal.metadata.geo.GeoContainer;
 
+import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
+
 /**
  * Adds geo data of 8,495 places in Germany.
+ * 
+ * GeoData is added to dataset using property <http://purl.org/dc/terms/spatial>
+ * to a node of type <http://purl.org/dc/terms/Location>. This node uses the
+ * property <https://www.w3.org/TR/vocab-dcat-2/#Property:location_centroid> to
+ * refer to a typed literal POINT of
+ * <http://www.opengis.net/ont/geosparql#wktLiteral>.
  * 
  * Limitations:
  * 
  * - Used knowledge base uses a fuzzy-matching and was not validated
  * 
  * - Only places consisting of one word supported
+ * 
+ * @see https://www.w3.org/TR/vocab-dcat-2/#Property:dataset_spatial
+ * @see https://www.w3.org/TR/vocab-dcat-2/#Class:Location
+ * @see https://www.w3.org/TR/vocab-dcat-2/#Property:location_centroid
+ * @see https://www.w3.org/TR/vocab-dcat-2/#ex-spatial-coverage-centroid
  *
  * @author Adrian Wilke
  */
 public class GeoData implements JenaModelProcessor {
 
-	protected SortedMap<String, GeoContainer> geoContainers;
 	public static final String PLACES_FILE = "places-germany.txt";
-	public static final boolean LABELS_TO_LOWER_CASE = false;
+	protected static final boolean LABELS_TO_LOWER_CASE = false;
+
+	protected static final Property PROP_DCAT_CENTROID = ResourceFactory
+			.createProperty("http://www.w3.org/ns/dcat#centroid");
+
+	protected SortedMap<String, GeoContainer> geoContainers;
 
 	@Override
 	public Model process(Model model, String datasetUri) throws Exception {
@@ -93,6 +113,7 @@ public class GeoData implements JenaModelProcessor {
 			words.add(matcher.group());
 		}
 
+		// Extract places
 		List<String> places = new LinkedList<>();
 		for (String word : words) {
 			if (geoContainers.containsKey(word)) {
@@ -100,8 +121,17 @@ public class GeoData implements JenaModelProcessor {
 			}
 		}
 
-		// TODO
-		places.forEach(System.out::print);
+		// Add geo data
+		for (String place : places) {
+			GeoContainer container = geoContainers.get(place);
+			// resource can be extended by an URI later.
+			Resource placeResource = ResourceFactory.createResource();
+			Literal wkt = ResourceFactory.createTypedLiteral("POINT(" + container.lat + " " + container.lon + ")",
+					WKTDatatype.INSTANCE);
+			model.add(placeResource, RDF.type, DCTerms.Location);
+			model.add(placeResource, PROP_DCAT_CENTROID, wkt);
+			model.add(dataset, DCTerms.spatial, placeResource);
+		}
 
 		return model;
 	}

@@ -12,6 +12,9 @@ import org.junit.runners.Suite.SuiteClasses;
 		// Minimal working example
 		ExampleTest.class,
 
+		// GeoData component
+		GeoDataTest.class,
+
 		// LanguageDetection component
 		LanguageDetectionTest.class,
 
