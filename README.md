@@ -1,7 +1,7 @@
 # OPAL metadata refinement
 
-* **Language Detection** based on [Apache OpenNLP](https://opennlp.apache.org/)
-* **Geographic data** based on [LauNuts](https://github.com/projekt-opal/LauNuts)
+* **Language Detection** based on [Apache OpenNLP](https://opennlp.apache.org/) updates language tags of title and description literals of 4 languages.
+* **Geographic data** based on [LauNuts](https://github.com/projekt-opal/LauNuts) adds geo data of 8,495 places in Germany.
 
 
 ## Usage with Apache Maven
