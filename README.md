@@ -40,6 +40,7 @@ Available versions are listed at [maven.aksw.org](https://maven.aksw.org/archiva
 import java.io.File;
 import org.apache.jena.rdf.model.Model;
 import org.dice_research.opal.common.utilities.FileHandler;
+import org.dice_research.opal.metadata.GeoData;
 import org.dice_research.opal.metadata.LanguageDetection;
 public class Example {
 
@@ -64,13 +65,29 @@ public class Example {
 		languageDetection.initialize();
 
 		// Update model
-		model = languageDetection.process(model, datasetUri);
+		languageDetection.processModel(model, datasetUri);
 
 		// Write updated model into TURTLE file
 		FileHandler.export(turtleOutputFile, model);
 	}
-}
+```
 
+Example input:
+
+```
+<http://example.org/>
+        a       <http://www.w3.org/ns/dcat#Dataset> ;
+        <http://purl.org/dc/terms/title>
+                "Places in Berlin" .
+```
+
+Example output:
+
+```
+<http://example.org/>
+        a       <http://www.w3.org/ns/dcat#Dataset> ;
+        <http://purl.org/dc/terms/title>
+                "Places in Berlin"@en .
 ```
 
 
@@ -101,12 +118,11 @@ public class Example {
 		Model model = FileHandler.importModel(turtleInputFile);
 
 		// Update model
-		model = new GeoData().process(model, datasetUri);
+		new GeoData().processModel(model, datasetUri);
 
 		// Write updated model into TURTLE file
 		FileHandler.export(turtleOutputFile, model);
 	}
-}
 ```
 
 Example input:

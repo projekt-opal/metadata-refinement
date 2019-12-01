@@ -15,6 +15,7 @@ import org.apache.jena.vocabulary.DCTerms;
 import org.dice_research.opal.common.constants.ISO_639_1;
 import org.dice_research.opal.common.constants.ISO_639_3;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
+import org.dice_research.opal.common.interfaces.ModelProcessor;
 import org.dice_research.opal.metadata.lang.LangDetector;
 
 import opennlp.tools.langdetect.Language;
@@ -24,7 +25,8 @@ import opennlp.tools.langdetect.Language;
  *
  * @author Adrian Wilke
  */
-public class LanguageDetection implements JenaModelProcessor {
+@SuppressWarnings("deprecation")
+public class LanguageDetection implements ModelProcessor, JenaModelProcessor {
 
 	protected final static double REQUIRED_CONFIDENCE_TITLE = 0.01;
 	protected final static double REQUIRED_CONFIDENCE_DESCRIPTION = 0.75;
@@ -34,7 +36,7 @@ public class LanguageDetection implements JenaModelProcessor {
 	protected static Set<String> supportedIso_639_3;
 
 	@Override
-	public Model process(Model model, String datasetUri) throws Exception {
+	public void processModel(Model model, String datasetUri) throws Exception {
 
 		initialize();
 
@@ -62,6 +64,15 @@ public class LanguageDetection implements JenaModelProcessor {
 			}
 		}
 
+	}
+
+	/**
+	 * @deprecated Replaced by {@link #processModel(Model, String)}.
+	 */
+	@Deprecated
+	@Override
+	public Model process(Model model, String datasetUri) throws Exception {
+		processModel(model, datasetUri);
 		return model;
 	}
 

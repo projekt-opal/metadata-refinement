@@ -58,7 +58,7 @@ public class GeoDataTest {
 		model.addLiteral(dataset, DCTerms.description, description);
 
 		GeoData geoData = new GeoData();
-		model = geoData.process(model, datasetUri);
+		geoData.processModel(model, datasetUri);
 
 		NodeIterator spatialObjIt = model
 				.listObjectsOfProperty(ResourceFactory.createProperty("http://purl.org/dc/terms/spatial"));
@@ -97,12 +97,12 @@ public class GeoDataTest {
 		model.addLiteral(dataset, DCTerms.title, title);
 
 		Model modelWithtitle = ModelFactory.createDefaultModel().add(model);
-		Model inputModel = ModelFactory.createDefaultModel().add(modelWithtitle);
 
 		// Check if model would be processed
 
-		Model modelWithtitleProcessed = new GeoData().process(inputModel, datasetUri);
-		Assert.assertNotEquals(modelWithtitle.size(), modelWithtitleProcessed.size());
+		Model inputModel = ModelFactory.createDefaultModel().add(modelWithtitle);
+		new GeoData().processModel(inputModel, datasetUri);
+		Assert.assertNotEquals(modelWithtitle.size(), inputModel.size());
 
 		// Add spatial data to create model NOT to process
 
@@ -112,7 +112,7 @@ public class GeoDataTest {
 		// Check if model is NOT processed
 
 		inputModel = ModelFactory.createDefaultModel().add(model);
-		Model processedModel = new GeoData().process(inputModel, datasetUri);
-		Assert.assertEquals(model.size(), processedModel.size());
+		new GeoData().processModel(inputModel, datasetUri);
+		Assert.assertEquals(model.size(), inputModel.size());
 	}
 }

@@ -22,6 +22,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
+import org.dice_research.opal.common.interfaces.ModelProcessor;
 import org.dice_research.opal.common.vocabulary.Dcat;
 import org.dice_research.opal.metadata.geo.GeoContainer;
 
@@ -49,7 +50,8 @@ import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
  *
  * @author Adrian Wilke
  */
-public class GeoData implements JenaModelProcessor {
+@SuppressWarnings("deprecation")
+public class GeoData implements ModelProcessor, JenaModelProcessor {
 
 	public static final String PLACES_FILE = "places-germany.txt";
 	protected static final boolean LABELS_TO_LOWER_CASE = false;
@@ -57,8 +59,7 @@ public class GeoData implements JenaModelProcessor {
 	protected static SortedMap<String, GeoContainer> geoContainers;
 
 	@Override
-	public Model process(Model model, String datasetUri) throws Exception {
-
+	public void processModel(Model model, String datasetUri) throws Exception {
 		if (geoContainers == null) {
 			initialize();
 		}
@@ -67,7 +68,7 @@ public class GeoData implements JenaModelProcessor {
 
 		// Process only if no spatial information exists
 		if (model.listObjectsOfProperty(dataset, DCTerms.spatial).hasNext()) {
-			return model;
+			return;
 		}
 
 		StringBuilder stringBuilder = new StringBuilder();
@@ -131,7 +132,15 @@ public class GeoData implements JenaModelProcessor {
 			model.add(placeResource, Dcat.centroid, wkt);
 			model.add(dataset, DCTerms.spatial, placeResource);
 		}
+	}
 
+	/**
+	 * @deprecated Replaced by {@link #processModel(Model, String)}.
+	 */
+	@Deprecated
+	@Override
+	public Model process(Model model, String datasetUri) throws Exception {
+		processModel(model, datasetUri);
 		return model;
 	}
 

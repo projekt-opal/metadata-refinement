@@ -30,7 +30,7 @@ public class Example {
 		languageDetection.initialize();
 
 		// Update model
-		model = languageDetection.process(model, datasetUri);
+		languageDetection.processModel(model, datasetUri);
 
 		// Write updated model into TURTLE file
 		FileHandler.export(turtleOutputFile, model);
@@ -53,7 +53,7 @@ public class Example {
 		Model model = FileHandler.importModel(turtleInputFile);
 
 		// Update model
-		model = new GeoData().process(model, datasetUri);
+		new GeoData().processModel(model, datasetUri);
 
 		// Write updated model into TURTLE file
 		FileHandler.export(turtleOutputFile, model);

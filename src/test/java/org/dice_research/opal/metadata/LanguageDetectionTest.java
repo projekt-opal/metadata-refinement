@@ -72,22 +72,21 @@ public class LanguageDetectionTest {
 
 		LanguageDetection languageDetection = new LanguageDetection();
 
-		Model testModel = languageDetection.process(model, datasetUri);
-		Resource testResource = testModel.getResource(datasetUri);
+		languageDetection.processModel(model, datasetUri);
+		Resource testResource = model.getResource(datasetUri);
 
 		// Properties also in returned model
 		assertTrue(testResource.hasProperty(DCTerms.title));
 		assertTrue(testResource.hasProperty(DCTerms.description));
 
 		// Literals have language tags
-		assertFalse(testModel.getProperty(testResource, DCTerms.description).getObject().asLiteral().getLanguage()
-				.isEmpty());
-		assertFalse(testModel.getProperty(testResource, DCTerms.title).getObject().asLiteral().getLanguage().isEmpty());
+		assertFalse(
+				model.getProperty(testResource, DCTerms.description).getObject().asLiteral().getLanguage().isEmpty());
+		assertFalse(model.getProperty(testResource, DCTerms.title).getObject().asLiteral().getLanguage().isEmpty());
 
 		// Literals have correct language tags
-		assertEquals("de",
-				testModel.getProperty(testResource, DCTerms.description).getObject().asLiteral().getLanguage());
-		assertEquals("de", testModel.getProperty(testResource, DCTerms.title).getObject().asLiteral().getLanguage());
+		assertEquals("de", model.getProperty(testResource, DCTerms.description).getObject().asLiteral().getLanguage());
+		assertEquals("de", model.getProperty(testResource, DCTerms.title).getObject().asLiteral().getLanguage());
 	}
 
 }
