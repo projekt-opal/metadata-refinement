@@ -7,15 +7,14 @@ import java.util.Set;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.DCTerms;
 import org.dice_research.opal.common.constants.ISO_639_1;
+import org.dice_research.opal.common.constants.ISO_639_3;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
-import org.dice_research.opal.metadata.lang.ISO_639_3;
 import org.dice_research.opal.metadata.lang.LangDetector;
 
 import opennlp.tools.langdetect.Language;
@@ -39,8 +38,6 @@ public class LanguageDetection implements JenaModelProcessor {
 
 		initialize();
 
-		// Create a new model
-		model = ModelFactory.createDefaultModel().add(model);
 		Resource dataset = ResourceFactory.createResource(datasetUri);
 
 		// Set language tag for title

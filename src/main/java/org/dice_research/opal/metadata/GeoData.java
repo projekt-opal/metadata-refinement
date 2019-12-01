@@ -15,15 +15,14 @@ import java.util.regex.Pattern;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
+import org.dice_research.opal.common.vocabulary.Dcat;
 import org.dice_research.opal.metadata.geo.GeoContainer;
 
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
@@ -55,10 +54,7 @@ public class GeoData implements JenaModelProcessor {
 	public static final String PLACES_FILE = "places-germany.txt";
 	protected static final boolean LABELS_TO_LOWER_CASE = false;
 
-	protected static final Property PROP_DCAT_CENTROID = ResourceFactory
-			.createProperty("http://www.w3.org/ns/dcat#centroid");
-
-	protected SortedMap<String, GeoContainer> geoContainers;
+	protected static SortedMap<String, GeoContainer> geoContainers;
 
 	@Override
 	public Model process(Model model, String datasetUri) throws Exception {
@@ -67,10 +63,13 @@ public class GeoData implements JenaModelProcessor {
 			initialize();
 		}
 
-		// Create a new model
-		model = ModelFactory.createDefaultModel().add(model);
-
 		Resource dataset = ResourceFactory.createResource(datasetUri);
+
+		// Process only if no spatial information exists
+		if (model.listObjectsOfProperty(dataset, DCTerms.spatial).hasNext()) {
+			return model;
+		}
+
 		StringBuilder stringBuilder = new StringBuilder();
 
 		// Collect title(s)
@@ -129,7 +128,7 @@ public class GeoData implements JenaModelProcessor {
 			Literal wkt = ResourceFactory.createTypedLiteral("POINT(" + container.lat + " " + container.lon + ")",
 					WKTDatatype.INSTANCE);
 			model.add(placeResource, RDF.type, DCTerms.Location);
-			model.add(placeResource, PROP_DCAT_CENTROID, wkt);
+			model.add(placeResource, Dcat.centroid, wkt);
 			model.add(dataset, DCTerms.spatial, placeResource);
 		}
 

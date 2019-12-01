@@ -30,14 +30,14 @@ public class GeoDataTest {
 
 		GeoData geoData = new GeoData();
 		geoData.initialize();
-		Assert.assertEquals("geo data size", linesOfPlacesFile / 3, geoData.geoContainers.size());
+		Assert.assertEquals("geo data size", linesOfPlacesFile / 3, GeoData.geoContainers.size());
 		if (Boolean.FALSE) {
 			System.out.println((linesOfPlacesFile / 3) + " places " + GeoDataTest.class.getName());
 		}
 
-		String firstKey = geoData.geoContainers.keySet().iterator().next();
-		float firstLat = geoData.geoContainers.get(firstKey).lat;
-		float firstLon = geoData.geoContainers.get(firstKey).lon;
+		String firstKey = GeoData.geoContainers.keySet().iterator().next();
+		float firstLat = GeoData.geoContainers.get(firstKey).lat;
+		float firstLon = GeoData.geoContainers.get(firstKey).lon;
 		Assert.assertEquals("geo data first label", "Heiligenstedtenerkamp", firstKey);
 		Assert.assertEquals("geo data first lat", 53.9f, firstLat, 0);
 		Assert.assertEquals("geo data first lon", 9.46667f, firstLon, 0);
@@ -78,5 +78,41 @@ public class GeoDataTest {
 			FileHandler.export(file, model);
 			System.out.println("Wrote: " + file.getAbsolutePath() + " " + this.getClass().getName());
 		}
+	}
+
+	/**
+	 * Tests, if processing is skipped if spatial data exists.
+	 */
+	@Test
+	public void testSkipOnSpatialExist() throws Exception {
+		Model model = ModelFactory.createDefaultModel();
+
+		// Create data with title, which would be processed
+
+		String datasetUri = "http://projekt-opal.de/skipTest";
+		Resource dataset = ResourceFactory.createResource(datasetUri);
+		model.add(dataset, RDF.type, DCAT.Dataset);
+
+		Literal title = ResourceFactory.createPlainLiteral("Berlin and Paderborn");
+		model.addLiteral(dataset, DCTerms.title, title);
+
+		Model modelWithtitle = ModelFactory.createDefaultModel().add(model);
+		Model inputModel = ModelFactory.createDefaultModel().add(modelWithtitle);
+
+		// Check if model would be processed
+
+		Model modelWithtitleProcessed = new GeoData().process(inputModel, datasetUri);
+		Assert.assertNotEquals(modelWithtitle.size(), modelWithtitleProcessed.size());
+
+		// Add spatial data to create model NOT to process
+
+		Literal spatialDummy = ResourceFactory.createPlainLiteral("Dummy");
+		model.addLiteral(dataset, DCTerms.spatial, spatialDummy);
+
+		// Check if model is NOT processed
+
+		inputModel = ModelFactory.createDefaultModel().add(model);
+		Model processedModel = new GeoData().process(inputModel, datasetUri);
+		Assert.assertEquals(model.size(), processedModel.size());
 	}
 }
