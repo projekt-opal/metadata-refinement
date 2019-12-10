@@ -1,8 +1,8 @@
 package org.dice_research.opal.metadata;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -157,8 +157,8 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 			}
 		});
 
-		File file = new File(this.getClass().getClassLoader().getResource(PLACES_FILE).toURI());
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream((PLACES_FILE));
+		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
 			String line, label = null;
 			int counter = 0;
 			GeoContainer geoContainer = null;
