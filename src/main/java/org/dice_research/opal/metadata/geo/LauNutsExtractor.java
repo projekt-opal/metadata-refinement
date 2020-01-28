@@ -125,6 +125,7 @@ public class LauNutsExtractor {
 			lines.add(container.label);
 			lines.add(String.valueOf(container.lat));
 			lines.add(String.valueOf(container.lon));
+			lines.add(container.uri);
 		}
 
 		// Write
@@ -141,6 +142,7 @@ public class LauNutsExtractor {
 	private GeoContainer extract(Resource resource) {
 		GeoContainer container = new GeoContainer();
 
+		// Get label
 		if (resource.hasProperty(SKOS.prefLabel)) {
 			String label = resource.getProperty(SKOS.prefLabel).getObject().asLiteral().getString().trim();
 
@@ -163,9 +165,8 @@ public class LauNutsExtractor {
 			container.label = label;
 		}
 
-		if (resource.hasProperty(SKOS.relatedMatch))
-
-		{
+		// Get coordinates
+		if (resource.hasProperty(SKOS.relatedMatch)) {
 			RDFNode placeNode = resource.getProperty(SKOS.relatedMatch).getObject();
 			if (placeNode.isResource()) {
 				Resource place = placeNode.asResource();
@@ -173,6 +174,9 @@ public class LauNutsExtractor {
 				container.lon = place.getProperty(PROP_LONG).getObject().asLiteral().getFloat();
 			}
 		}
+
+		// Get URI
+		container.uri = resource.getURI();
 
 		return container;
 	}

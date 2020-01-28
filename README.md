@@ -140,12 +140,13 @@ Example output:
 <http://example.org/>
         a       <http://www.w3.org/ns/dcat#Dataset> ;
         <http://purl.org/dc/terms/spatial>
-                [ a       <http://purl.org/dc/terms/Location> ;
-                  <http://www.w3.org/ns/dcat#centroid>
-                          "POINT(52.5167 13.3833)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>
-                ] ;
+                <http://data.europa.eu/nuts/code/DE3> ;
         <http://purl.org/dc/terms/title>
                 "Places in Berlin" .
+<http://data.europa.eu/nuts/code/DE3>
+        a       <http://purl.org/dc/terms/Location> ;
+        <http://www.w3.org/ns/dcat#centroid>
+                "POINT(52.5167 13.3833)"^^<http://www.opengis.net/ont/geosparql#wktLiteral> .
 ```
 
 ## Note

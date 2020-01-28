@@ -23,6 +23,8 @@ import org.junit.Test;
  */
 public class ExampleTest {
 
+	public static final boolean DELETE_GEO_TEST_FILE = true;
+
 	@Test
 	public void testLanguage() throws Exception {
 
@@ -65,10 +67,18 @@ public class ExampleTest {
 
 		File turtleInputFile = File.createTempFile(ExampleTest.class.getName(), ".in.txt");
 		FileHandler.export(turtleInputFile, model);
-		turtleInputFile.deleteOnExit();
+		if (DELETE_GEO_TEST_FILE) {
+			turtleInputFile.deleteOnExit();
+		} else {
+			System.out.println("In:  " + turtleInputFile.getAbsolutePath());
+		}
 
 		File turtleOutputFile = File.createTempFile(ExampleTest.class.getName(), ".out.txt");
-		turtleOutputFile.deleteOnExit();
+		if (DELETE_GEO_TEST_FILE) {
+			turtleOutputFile.deleteOnExit();
+		} else {
+			System.out.println("Out: " + turtleOutputFile.getAbsolutePath());
+		}
 
 		assertTrue(turtleInputFile.canRead());
 

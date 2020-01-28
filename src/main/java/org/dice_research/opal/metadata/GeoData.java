@@ -124,8 +124,7 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 		// Add geo data
 		for (String place : places) {
 			GeoContainer container = geoContainers.get(place);
-			// resource can be extended by an URI later.
-			Resource placeResource = ResourceFactory.createResource();
+			Resource placeResource = ResourceFactory.createResource(container.uri);
 			Literal wkt = ResourceFactory.createTypedLiteral("POINT(" + container.lat + " " + container.lon + ")",
 					WKTDatatype.INSTANCE);
 			model.add(placeResource, RDF.type, DCTerms.Location);
@@ -168,11 +167,14 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 					geoContainer = new GeoContainer();
 				} else if (counter == 1) {
 					geoContainer.lat = Float.valueOf(line);
-				} else {
+				} else if (counter == 2) {
 					geoContainer.lon = Float.valueOf(line);
+				} else {
+					geoContainer.label = label;
+					geoContainer.uri = line;
 					geoContainers.put(label, geoContainer);
 				}
-				counter = (counter + 1) % 3;
+				counter = (counter + 1) % 4;
 			}
 		}
 	}

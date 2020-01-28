@@ -23,14 +23,15 @@ public class GeoContainer implements Comparable<GeoContainer> {
 	public String label;
 	public float lat;
 	public float lon;
+	public String uri;
 
 	@Override
 	public String toString() {
-		return label + " " + lat + " " + lon;
+		return label + " " + lat + " " + lon + " " + uri;
 	}
 
 	public boolean isComplete() {
-		return (label != null && !label.isEmpty() && lat != 0 && lon != 0);
+		return (label != null && !label.isEmpty() && lat != 0 && lon != 0 && uri != null && !uri.isEmpty());
 	}
 
 	@Override
