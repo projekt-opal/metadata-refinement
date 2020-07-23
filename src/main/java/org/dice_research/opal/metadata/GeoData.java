@@ -17,10 +17,11 @@ import java.util.regex.Pattern;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
@@ -57,7 +58,8 @@ import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 public class GeoData implements ModelProcessor, JenaModelProcessor {
 
 	public static final String PLACES_FILE = "places-germany.txt";
-	protected static final boolean LABELS_TO_LOWER_CASE = true;
+	protected static final boolean LABELS_TO_LOWER_CASE = false;
+	protected static boolean runIfSpatialAlreadyExists = true;
 
 	protected static SortedMap<String, GeoContainer> geoContainers;
 	protected Map<String, String> urisToLabels = new HashMap<>();
@@ -68,46 +70,25 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 			initialize();
 		}
 
-		Resource dataset = ResourceFactory.createResource(datasetUri);
+		Resource dataset = model.getResource(datasetUri);
 
 		// Process only if no spatial information exists
-		if (model.listObjectsOfProperty(dataset, DCTerms.spatial).hasNext()) {
+		if (!runIfSpatialAlreadyExists && model.listObjectsOfProperty(dataset, DCTerms.spatial).hasNext()) {
 			return;
 		}
 
 		StringBuilder stringBuilder = new StringBuilder();
 
-		// Collect title(s)
-		NodeIterator titleIterator = model.listObjectsOfProperty(dataset, DCTerms.title);
-		while (titleIterator.hasNext()) {
-			RDFNode titleNode = titleIterator.next();
-			if (titleNode.isLiteral()) {
-				String label = titleNode.asLiteral().getString();
-				stringBuilder.append(LABELS_TO_LOWER_CASE ? label.toLowerCase() : label);
-				stringBuilder.append(System.lineSeparator());
-			}
-		}
+		collectLiterals(dataset, DCTerms.title, stringBuilder);
+		collectLiterals(dataset, DCTerms.description, stringBuilder);
+		collectLiterals(dataset, DCAT.keyword, stringBuilder);
+		collectLiterals(dataset, DCTerms.spatial, stringBuilder);
 
-		// Collect description(s)
-		NodeIterator decriptionIterator = model.listObjectsOfProperty(dataset, DCTerms.description);
-		while (decriptionIterator.hasNext()) {
-			RDFNode descriptionNode = decriptionIterator.next();
-			if (descriptionNode.isLiteral()) {
-				String label = descriptionNode.asLiteral().getString();
-				stringBuilder.append(LABELS_TO_LOWER_CASE ? label.toLowerCase() : label);
-				stringBuilder.append(System.lineSeparator());
-			}
-		}
-
-		// Collect keyword(s)
-		NodeIterator keywordIterator = model.listObjectsOfProperty(dataset, DCAT.keyword);
-		while (keywordIterator.hasNext()) {
-			RDFNode keywordNode = keywordIterator.next();
-			if (keywordNode.isLiteral()) {
-				String label = keywordNode.asLiteral().getString();
-				stringBuilder.append(LABELS_TO_LOWER_CASE ? label.toLowerCase() : label);
-				stringBuilder.append(System.lineSeparator());
-			}
+		StmtIterator stmtIterator = dataset.listProperties(DCAT.distribution);
+		while (stmtIterator.hasNext()) {
+			Resource distribution = stmtIterator.next().getObject().asResource();
+			collectLiterals(distribution, DCTerms.title, stringBuilder);
+			collectLiterals(distribution, DCTerms.description, stringBuilder);
 		}
 
 		// Get lower-case words
@@ -115,9 +96,10 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 		// Pattern pattern = Pattern.compile("\\w{3,}"); // contains 'blicherweise'
 		// Pattern pattern = Pattern.compile("[a-z\\x7f-\\xff]{3,}"); // contains
 		// 'üblicherweise'
+		// ASCII characters equivalent to \x00-\x7f
 		Pattern pattern;
 		if (LABELS_TO_LOWER_CASE) {
-			// Does also contain upper-case characters
+			// Does begin wirh lower-case, but also contains upper-case characters
 			pattern = Pattern.compile("[a-z\\x7f-\\xff]{3,}");
 		} else {
 			pattern = Pattern.compile("[A-Za-z\\x7f-\\xff]{3,}");
@@ -147,6 +129,18 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 			model.add(dataset, DCTerms.spatial, placeResource);
 
 			urisToLabels.put(placeResource.getURI(), container.label);
+		}
+	}
+
+	private void collectLiterals(Resource resource, Property property, StringBuilder stringBuilder) {
+		StmtIterator stmtIterator = resource.listProperties(property);
+		while (stmtIterator.hasNext()) {
+			RDFNode rdfNode = stmtIterator.next().getObject();
+			if (rdfNode.isLiteral()) {
+				String string = rdfNode.asLiteral().getLexicalForm();
+				stringBuilder.append(LABELS_TO_LOWER_CASE ? string.toLowerCase() : string);
+				stringBuilder.append(System.lineSeparator());
+			}
 		}
 	}
 
