@@ -14,6 +14,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.dice_research.opal.common.utilities.FileHandler;
 import org.dice_research.opal.metadata.lang.TestData;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 
 /**
@@ -94,6 +95,9 @@ public class GeoDataTest {
 	 */
 	@Test
 	public void testSkipOnSpatialExist() throws Exception {
+
+		Assume.assumeTrue(!GeoData.runIfSpatialAlreadyExists);
+
 		Model model = ModelFactory.createDefaultModel();
 
 		// Create data with title, which would be processed
