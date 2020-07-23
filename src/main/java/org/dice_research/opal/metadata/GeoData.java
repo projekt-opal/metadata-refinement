@@ -19,6 +19,7 @@ import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
@@ -54,7 +55,7 @@ import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 public class GeoData implements ModelProcessor, JenaModelProcessor {
 
 	public static final String PLACES_FILE = "places-germany.txt";
-	protected static final boolean LABELS_TO_LOWER_CASE = false;
+	protected static final boolean LABELS_TO_LOWER_CASE = true;
 
 	protected static SortedMap<String, GeoContainer> geoContainers;
 
@@ -87,9 +88,20 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 		// Collect description(s)
 		NodeIterator decriptionIterator = model.listObjectsOfProperty(dataset, DCTerms.description);
 		while (decriptionIterator.hasNext()) {
-			RDFNode decriptionNode = decriptionIterator.next();
-			if (decriptionNode.isLiteral()) {
-				String label = decriptionNode.asLiteral().getString();
+			RDFNode descriptionNode = decriptionIterator.next();
+			if (descriptionNode.isLiteral()) {
+				String label = descriptionNode.asLiteral().getString();
+				stringBuilder.append(LABELS_TO_LOWER_CASE ? label.toLowerCase() : label);
+				stringBuilder.append(System.lineSeparator());
+			}
+		}
+
+		// Collect keyword(s)
+		NodeIterator keywordIterator = model.listObjectsOfProperty(dataset, DCAT.keyword);
+		while (keywordIterator.hasNext()) {
+			RDFNode keywordNode = keywordIterator.next();
+			if (keywordNode.isLiteral()) {
+				String label = keywordNode.asLiteral().getString();
 				stringBuilder.append(LABELS_TO_LOWER_CASE ? label.toLowerCase() : label);
 				stringBuilder.append(System.lineSeparator());
 			}
@@ -163,7 +175,11 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 			GeoContainer geoContainer = null;
 			while ((line = bufferedReader.readLine()) != null) {
 				if (counter == 0) {
-					label = line;
+					if (LABELS_TO_LOWER_CASE) {
+						label = line.toLowerCase();
+					} else {
+						label = line;
+					}
 					geoContainer = new GeoContainer();
 				} else if (counter == 1) {
 					geoContainer.lat = Float.valueOf(line);
