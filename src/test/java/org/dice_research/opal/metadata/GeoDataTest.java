@@ -40,8 +40,13 @@ public class GeoDataTest {
 		float firstLat = GeoData.geoContainers.get(firstKey).lat;
 		float firstLon = GeoData.geoContainers.get(firstKey).lon;
 		String firstUri = GeoData.geoContainers.get(firstKey).uri;
-		Assert.assertEquals("geo data first label", "Heiligenstedtenerkamp", firstKey);
-		Assert.assertEquals("geo data first label", "Heiligenstedtenerkamp", firstLabel);
+		if (GeoData.LABELS_TO_LOWER_CASE) {
+			Assert.assertEquals("geo data first label", "heiligenstedtenerkamp", firstKey);
+			Assert.assertEquals("geo data first label", "heiligenstedtenerkamp", firstLabel);
+		} else {
+			Assert.assertEquals("geo data first label", "Heiligenstedtenerkamp", firstKey);
+			Assert.assertEquals("geo data first label", "Heiligenstedtenerkamp", firstLabel);
+		}
 		Assert.assertEquals("geo data first lat", 53.9f, firstLat, 0);
 		Assert.assertEquals("geo data first lon", 9.46667f, firstLon, 0);
 		Assert.assertEquals("geo data first label", "http://projekt-opal.de/launuts/lau/DE/01061035", firstUri);

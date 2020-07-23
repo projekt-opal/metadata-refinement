@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -58,6 +60,7 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 	protected static final boolean LABELS_TO_LOWER_CASE = true;
 
 	protected static SortedMap<String, GeoContainer> geoContainers;
+	protected static Map<String, String> urisToLabels = new HashMap<>();
 
 	@Override
 	public void processModel(Model model, String datasetUri) throws Exception {
@@ -142,6 +145,8 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 			model.add(placeResource, RDF.type, DCTerms.Location);
 			model.add(placeResource, Dcat.centroid, wkt);
 			model.add(dataset, DCTerms.spatial, placeResource);
+
+			urisToLabels.put(placeResource.getURI(), container.label);
 		}
 	}
 
@@ -195,4 +200,10 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 		}
 	}
 
+	/**
+	 * Gets place URIs mapped to place labels.
+	 */
+	public static Map<String, String> getUrisToLabels() {
+		return urisToLabels;
+	}
 }
