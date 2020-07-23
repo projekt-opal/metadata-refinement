@@ -60,7 +60,7 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 	protected static final boolean LABELS_TO_LOWER_CASE = true;
 
 	protected static SortedMap<String, GeoContainer> geoContainers;
-	protected static Map<String, String> urisToLabels = new HashMap<>();
+	protected Map<String, String> urisToLabels = new HashMap<>();
 
 	@Override
 	public void processModel(Model model, String datasetUri) throws Exception {
@@ -203,7 +203,7 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 	/**
 	 * Gets place URIs mapped to place labels.
 	 */
-	public static Map<String, String> getUrisToLabels() {
+	public Map<String, String> getUrisToLabels() {
 		return urisToLabels;
 	}
 }
