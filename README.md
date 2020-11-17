@@ -141,6 +141,8 @@ Example output:
         a       <http://www.w3.org/ns/dcat#Dataset> ;
         <http://purl.org/dc/terms/spatial>
                 [ a       <http://projekt-opal.de/Location> , <http://purl.org/dc/terms/Location> ;
+                  <http://www.w3.org/2000/01/rdf-schema#label>
+                          "Berlin" ;
                   <http://www.w3.org/ns/dcat#centroid>
                           "POINT(52.5005 13.4022)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>
                 ] ;

@@ -22,9 +22,11 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.riot.thrift.wire.RDF_StreamRow;
 import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
 import org.dice_research.opal.common.interfaces.ModelProcessor;
 import org.dice_research.opal.common.vocabulary.Dcat;
@@ -125,9 +127,11 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 			Resource placeResource = ResourceFactory.createResource();
 			Literal wkt = ResourceFactory.createTypedLiteral("POINT(" + container.lat + " " + container.lon + ")",
 					WKTDatatype.INSTANCE);
+			Literal label = ResourceFactory.createPlainLiteral(container.label);
 			model.add(placeResource, RDF.type, DCTerms.Location);
 			model.add(placeResource, RDF.type, Opal.OPAL_LOCATION);
 			model.add(placeResource, Dcat.centroid, wkt);
+			model.add(placeResource, RDFS.label, label);
 			model.add(dataset, DCTerms.spatial, placeResource);
 
 			urisToLabels.put(placeResource.getURI(), container.label);
