@@ -103,9 +103,9 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 		Pattern pattern;
 		if (LABELS_TO_LOWER_CASE) {
 			// Does begin wirh lower-case, but also contains upper-case characters
-			pattern = Pattern.compile("[a-z\\x7f-\\xff]{3,}");
+			pattern = Pattern.compile("[a-z\\x7f-\\xff\\-]{3,}");
 		} else {
-			pattern = Pattern.compile("[A-Za-z\\x7f-\\xff]{3,}");
+			pattern = Pattern.compile("[A-Za-z\\x7f-\\xff\\-]{3,}");
 		}
 		Matcher matcher = pattern.matcher(stringBuilder);
 		SortedSet<String> words = new TreeSet<>();
