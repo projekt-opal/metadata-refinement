@@ -23,7 +23,7 @@ import org.junit.Test;
  */
 public class ExampleTest {
 
-	public static final boolean DELETE_GEO_TEST_FILE = true;
+	public static final boolean DELETE_GEO_TEST_FILE = false;
 
 	@Test
 	public void testLanguage() throws Exception {

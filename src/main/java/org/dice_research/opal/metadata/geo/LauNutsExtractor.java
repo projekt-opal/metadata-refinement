@@ -101,7 +101,7 @@ public class LauNutsExtractor {
 		ResIterator resIterator = model.listSubjectsWithProperty(RDF.type, RES_NUTS);
 		while (resIterator.hasNext()) {
 			GeoContainer container = extract(resIterator.next());
-			if (container.isComplete()) {
+			if (container.hasLabelAndCoords()) {
 				containerMap.put(container.label, container);
 			}
 		}
@@ -110,7 +110,7 @@ public class LauNutsExtractor {
 		resIterator = model.listSubjectsWithProperty(RDF.type, RES_LAU);
 		while (resIterator.hasNext()) {
 			GeoContainer container = extract(resIterator.next());
-			if (container.isComplete()) {
+			if (container.hasLabelAndCoords()) {
 				containerMap.put(container.label, container);
 			}
 		}

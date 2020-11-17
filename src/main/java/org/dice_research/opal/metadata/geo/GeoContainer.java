@@ -27,11 +27,11 @@ public class GeoContainer implements Comparable<GeoContainer> {
 
 	@Override
 	public String toString() {
-		return label + " " + lat + " " + lon + " " + uri;
+		return label + " " + lat + " " + lon;
 	}
 
-	public boolean isComplete() {
-		return (label != null && !label.isEmpty() && lat != 0 && lon != 0 && uri != null && !uri.isEmpty());
+	public boolean hasLabelAndCoords() {
+		return (label != null && !label.isEmpty() && lat != 0 && lon != 0);
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
 import org.dice_research.opal.common.interfaces.ModelProcessor;
 import org.dice_research.opal.common.vocabulary.Dcat;
+import org.dice_research.opal.common.vocabulary.Opal;
 import org.dice_research.opal.metadata.geo.GeoContainer;
 
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
@@ -57,7 +58,7 @@ import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 @SuppressWarnings("deprecation")
 public class GeoData implements ModelProcessor, JenaModelProcessor {
 
-	public static final String PLACES_FILE = "places-germany.txt";
+	public static final String PLACES_FILE = "places-de-at.txt";
 	protected static final boolean LABELS_TO_LOWER_CASE = false;
 	protected static boolean runIfSpatialAlreadyExists = true;
 
@@ -121,10 +122,11 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 		// Add geo data
 		for (String place : places) {
 			GeoContainer container = geoContainers.get(place);
-			Resource placeResource = ResourceFactory.createResource(container.uri);
+			Resource placeResource = ResourceFactory.createResource();
 			Literal wkt = ResourceFactory.createTypedLiteral("POINT(" + container.lat + " " + container.lon + ")",
 					WKTDatatype.INSTANCE);
 			model.add(placeResource, RDF.type, DCTerms.Location);
+			model.add(placeResource, RDF.type, Opal.OPAL_LOCATION);
 			model.add(placeResource, Dcat.centroid, wkt);
 			model.add(dataset, DCTerms.spatial, placeResource);
 
@@ -182,14 +184,12 @@ public class GeoData implements ModelProcessor, JenaModelProcessor {
 					geoContainer = new GeoContainer();
 				} else if (counter == 1) {
 					geoContainer.lat = Float.valueOf(line);
-				} else if (counter == 2) {
-					geoContainer.lon = Float.valueOf(line);
 				} else {
+					geoContainer.lon = Float.valueOf(line);
 					geoContainer.label = label;
-					geoContainer.uri = line;
 					geoContainers.put(label, geoContainer);
 				}
-				counter = (counter + 1) % 4;
+				counter = (counter + 1) % 3;
 			}
 		}
 	}

@@ -27,7 +27,7 @@ public class GeoDataTest {
 	@Test
 	public void testInitialization() throws Exception {
 
-		int linesOfPlacesFile = 25485;
+		int linesOfPlacesFile = 35859;
 
 		GeoData geoData = new GeoData();
 		geoData.initialize();
@@ -36,21 +36,22 @@ public class GeoDataTest {
 			System.out.println((linesOfPlacesFile / 3) + " places " + GeoDataTest.class.getName());
 		}
 
+		// Is sorted by string length
 		String firstKey = GeoData.geoContainers.keySet().iterator().next();
 		String firstLabel = GeoData.geoContainers.get(firstKey).label;
 		float firstLat = GeoData.geoContainers.get(firstKey).lat;
 		float firstLon = GeoData.geoContainers.get(firstKey).lon;
-		String firstUri = GeoData.geoContainers.get(firstKey).uri;
 		if (GeoData.LABELS_TO_LOWER_CASE) {
-			Assert.assertEquals("geo data first label", "heiligenstedtenerkamp", firstKey);
-			Assert.assertEquals("geo data first label", "heiligenstedtenerkamp", firstLabel);
+			Assert.assertEquals("geo data first key", "gdefr. geb. (lkr neustadt a.d.aisch-bad windsheim)", firstKey);
+			Assert.assertEquals("geo data first label", "gdefr. geb. (lkr neustadt a.d.aisch-bad windsheim)F",
+					firstLabel);
 		} else {
-			Assert.assertEquals("geo data first label", "Heiligenstedtenerkamp", firstKey);
-			Assert.assertEquals("geo data first label", "Heiligenstedtenerkamp", firstLabel);
+			Assert.assertEquals("geo data first key", "Gdefr. Geb. (Lkr Neustadt a.d.Aisch-Bad Windsheim)", firstKey);
+			Assert.assertEquals("geo data first label", "Gdefr. Geb. (Lkr Neustadt a.d.Aisch-Bad Windsheim)",
+					firstLabel);
 		}
-		Assert.assertEquals("geo data first lat", 53.9f, firstLat, 0);
-		Assert.assertEquals("geo data first lon", 9.46667f, firstLon, 0);
-		Assert.assertEquals("geo data first label", "http://projekt-opal.de/launuts/lau/DE/01061035", firstUri);
+		Assert.assertEquals("geo data first lat", 49.56484879581101f, firstLat, 0);
+		Assert.assertEquals("geo data first lon", 10.392938840348066f, firstLon, 0);
 	}
 
 	@Test
@@ -76,7 +77,6 @@ public class GeoDataTest {
 
 		Resource location = spatialObjIt.next().asResource();
 		Resource locationType = location.getProperty(RDF.type).getObject().asResource();
-		Assert.assertEquals("http://purl.org/dc/terms/Location", locationType.getURI());
 
 		NodeIterator geometryObjIt = model
 				.listObjectsOfProperty(ResourceFactory.createProperty("http://www.w3.org/ns/dcat#centroid"));
